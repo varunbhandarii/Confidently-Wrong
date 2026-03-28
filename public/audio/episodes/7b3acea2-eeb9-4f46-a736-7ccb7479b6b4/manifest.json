@@ -1,0 +1,268 @@
+{
+  "episodeId": "7b3acea2-eeb9-4f46-a736-7ccb7479b6b4",
+  "outputDir": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4",
+  "results": [
+    {
+      "turnIndex": 0,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_000_chad.mp3",
+      "characterCount": 133,
+      "durationEstimate": 8.388,
+      "emotion": "confident"
+    },
+    {
+      "turnIndex": 1,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_001_marina.mp3",
+      "characterCount": 112,
+      "durationEstimate": 7.0819375,
+      "emotion": "ominous"
+    },
+    {
+      "turnIndex": 2,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_002_chad.mp3",
+      "characterCount": 121,
+      "durationEstimate": 9.5896875,
+      "emotion": "excited"
+    },
+    {
+      "turnIndex": 3,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_003_marina.mp3",
+      "characterCount": 124,
+      "durationEstimate": 11.6271875,
+      "emotion": "ominous",
+      "stageDirection": "[dramatic pause]"
+    },
+    {
+      "turnIndex": 4,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_004_chad.mp3",
+      "characterCount": 78,
+      "durationEstimate": 4.3390625,
+      "emotion": "confident"
+    },
+    {
+      "turnIndex": 5,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_005_chad.mp3",
+      "characterCount": 150,
+      "durationEstimate": 9.82475,
+      "emotion": "confident"
+    },
+    {
+      "turnIndex": 6,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_006_marina.mp3",
+      "characterCount": 131,
+      "durationEstimate": 10.6084375,
+      "emotion": "ominous"
+    },
+    {
+      "turnIndex": 7,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_007_chad.mp3",
+      "characterCount": 116,
+      "durationEstimate": 8.1529375,
+      "emotion": "confident"
+    },
+    {
+      "turnIndex": 8,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_008_marina.mp3",
+      "characterCount": 166,
+      "durationEstimate": 12.9855625,
+      "emotion": "ominous",
+      "stageDirection": "[whispers]"
+    },
+    {
+      "turnIndex": 9,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_009_chad.mp3",
+      "characterCount": 141,
+      "durationEstimate": 8.7015,
+      "emotion": "confident"
+    },
+    {
+      "turnIndex": 10,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_010_marina.mp3",
+      "characterCount": 80,
+      "durationEstimate": 5.6974375,
+      "emotion": "ominous",
+      "stageDirection": "[sound: ominous low drone]"
+    },
+    {
+      "turnIndex": 11,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_011_chad.mp3",
+      "characterCount": 172,
+      "durationEstimate": 11.8100625,
+      "emotion": "excited",
+      "stageDirection": "[interrupts]"
+    },
+    {
+      "turnIndex": 12,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_012_marina.mp3",
+      "characterCount": 144,
+      "durationEstimate": 11.157,
+      "emotion": "ominous"
+    },
+    {
+      "turnIndex": 13,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_013_chad.mp3",
+      "characterCount": 137,
+      "durationEstimate": 8.466375,
+      "emotion": "confident"
+    },
+    {
+      "turnIndex": 14,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_014_marina.mp3",
+      "characterCount": 151,
+      "durationEstimate": 9.6419375,
+      "emotion": "ominous",
+      "stageDirection": "[sound: thunder and typing]"
+    },
+    {
+      "turnIndex": 15,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_015_chad.mp3",
+      "characterCount": 118,
+      "durationEstimate": 6.9513125,
+      "emotion": "excited"
+    },
+    {
+      "turnIndex": 16,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_016_marina.mp3",
+      "characterCount": 142,
+      "durationEstimate": 11.496625,
+      "emotion": "ominous"
+    },
+    {
+      "turnIndex": 17,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_017_chad.mp3",
+      "characterCount": 115,
+      "durationEstimate": 8.64925,
+      "emotion": "excited",
+      "stageDirection": "[interrupts]"
+    },
+    {
+      "turnIndex": 18,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_018_marina.mp3",
+      "characterCount": 50,
+      "durationEstimate": 3.1896875,
+      "emotion": "ominous",
+      "stageDirection": "[long pause]"
+    },
+    {
+      "turnIndex": 19,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_019_chad.mp3",
+      "characterCount": 160,
+      "durationEstimate": 9.5896875,
+      "emotion": "confident"
+    },
+    {
+      "turnIndex": 20,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_020_marina.mp3",
+      "characterCount": 105,
+      "durationEstimate": 7.57825,
+      "emotion": "ominous",
+      "stageDirection": "[dramatic pause]"
+    },
+    {
+      "turnIndex": 21,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_021_chad.mp3",
+      "characterCount": 64,
+      "durationEstimate": 3.503125,
+      "emotion": "confident"
+    },
+    {
+      "turnIndex": 22,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_022_marina.mp3",
+      "characterCount": 66,
+      "durationEstimate": 6.115375,
+      "emotion": "ominous"
+    },
+    {
+      "turnIndex": 23,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_023_chad.mp3",
+      "characterCount": 79,
+      "durationEstimate": 4.2345625,
+      "emotion": "confident"
+    },
+    {
+      "turnIndex": 24,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_024_marina.mp3",
+      "characterCount": 70,
+      "durationEstimate": 4.4435625,
+      "emotion": "ominous",
+      "stageDirection": "[sound: sharp violin sting]"
+    },
+    {
+      "turnIndex": 25,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_025_chad.mp3",
+      "characterCount": 78,
+      "durationEstimate": 5.044375,
+      "emotion": "excited"
+    },
+    {
+      "turnIndex": 26,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_026_marina.mp3",
+      "characterCount": 70,
+      "durationEstimate": 7.395375,
+      "emotion": "ominous"
+    },
+    {
+      "turnIndex": 27,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_027_chad.mp3",
+      "characterCount": 250,
+      "durationEstimate": 16.0419375,
+      "emotion": "confident",
+      "stageDirection": "[sponsor read: CanopyCore]"
+    },
+    {
+      "turnIndex": 28,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_028_chad.mp3",
+      "characterCount": 163,
+      "durationEstimate": 10.3733125,
+      "emotion": "excited"
+    },
+    {
+      "turnIndex": 29,
+      "speaker": "marina",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_029_marina.mp3",
+      "characterCount": 151,
+      "durationEstimate": 10.2949375,
+      "emotion": "ominous"
+    },
+    {
+      "turnIndex": 30,
+      "speaker": "chad",
+      "filePath": "public/audio/episodes/7b3acea2-eeb9-4f46-a736-7ccb7479b6b4/turn_030_chad.mp3",
+      "characterCount": 87,
+      "durationEstimate": 5.2271875,
+      "emotion": "confident"
+    }
+  ],
+  "totalCharacters": 3724,
+  "totalDurationEstimate": 258.2004375,
+  "failedTurns": [],
+  "elapsedMs": 22174
+}

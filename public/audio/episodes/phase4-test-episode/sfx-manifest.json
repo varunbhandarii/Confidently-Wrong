@@ -1,0 +1,62 @@
+{
+  "episodeId": "phase4-test-episode",
+  "introJingle": "public/audio/assets/jingles/3c245d03eea063e6.mp3",
+  "outroJingle": "public/audio/assets/jingles/2d4c7934a2a39d6a.mp3",
+  "transitions": [
+    "public/audio/assets/transitions/7cff31e570d3911b.mp3",
+    "public/audio/assets/transitions/89eb0b6dc6f09831.mp3",
+    "public/audio/assets/transitions/bbac5acef4497679.mp3"
+  ],
+  "turnSFX": {},
+  "totalGenerated": 0,
+  "totalCacheHits": 0,
+  "generationErrors": [
+    "low ominous hum at turns 5: \nInvalid `db.audioAsset.create()` invocation in\nC:\\Projects\\Hackathon\\Silly Hacks\\Confidently Wrong\\src\\lib\\audio-cache.ts:109:23\n\n  106   return;\n  107 }\n  108 \n→ 109 await db.audioAsset.create(\nForeign key constraint violated on the foreign key",
+    "violin at turns 13: \nInvalid `db.audioAsset.create()` invocation in\nC:\\Projects\\Hackathon\\Silly Hacks\\Confidently Wrong\\src\\lib\\audio-cache.ts:109:23\n\n  106   return;\n  107 }\n  108 \n→ 109 await db.audioAsset.create(\nForeign key constraint violated on the foreign key",
+    "thunder crash at turns 22: \nInvalid `db.audioAsset.create()` invocation in\nC:\\Projects\\Hackathon\\Silly Hacks\\Confidently Wrong\\src\\lib\\audio-cache.ts:109:23\n\n  106   return;\n  107 }\n  108 \n→ 109 await db.audioAsset.create(\nForeign key constraint violated on the foreign key"
+  ],
+  "requests": [
+    {
+      "turnIndices": [
+        5
+      ],
+      "rawDirections": [
+        "[sound: low ominous hum]"
+      ],
+      "normalizedKey": "low ominous hum",
+      "sfxPrompt": "low ominous hum, sound effect, short, clear",
+      "promptHash": "43746cd532137784",
+      "cached": false,
+      "durationSeconds": 2,
+      "promptInfluence": 0.55
+    },
+    {
+      "turnIndices": [
+        13
+      ],
+      "rawDirections": [
+        "[sound: dramatic violin sting]"
+      ],
+      "normalizedKey": "violin",
+      "sfxPrompt": "Sharp dramatic violin sting, sudden reveal, 1 second",
+      "promptHash": "b4c4df86582b4988",
+      "cached": false,
+      "durationSeconds": 1,
+      "promptInfluence": 0.6
+    },
+    {
+      "turnIndices": [
+        22
+      ],
+      "rawDirections": [
+        "[sound: thunder crash]"
+      ],
+      "normalizedKey": "thunder crash",
+      "sfxPrompt": "Single dramatic thunder crack, cinematic, 2 seconds",
+      "promptHash": "4449dd1f57bb0736",
+      "cached": false,
+      "durationSeconds": 2,
+      "promptInfluence": 0.55
+    }
+  ]
+}

@@ -13,7 +13,11 @@
     "db:init": "prisma db execute --file prisma/init.sql",
     "create:voices": "tsx scripts/create-voices.ts",
     "smoke-test": "tsx scripts/smoke-test.ts",
-    "test:script-gen": "tsx scripts/test-script-gen.ts"
+    "test:script-gen": "tsx scripts/test-script-gen.ts",
+    "test:synthesis": "tsx scripts/test-synthesis.ts",
+    "generate:assets": "tsx scripts/generate-assets.ts",
+    "test:sfx-pipeline": "tsx scripts/test-sfx-pipeline.ts",
+    "verify:sfx-cache": "tsx scripts/verify-sfx-cache.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",

@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { config } from "@/lib/config";
 import { db } from "@/lib/db";
@@ -80,7 +80,6 @@ export async function POST(req: NextRequest) {
       where: { id: episode.id },
       data: {
         scriptJson: JSON.stringify(script),
-        charactersUsed: budget.total,
         showNotes: script.show_notes,
         status: "scripting",
       },

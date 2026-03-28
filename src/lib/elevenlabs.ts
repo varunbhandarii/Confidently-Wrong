@@ -1,12 +1,13 @@
-﻿import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
+import { existsSync } from "node:fs";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+
+import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
 
 import { config } from "./config";
 import type { VoiceSettings } from "./types";
 
 let client: ElevenLabsClient | undefined;
-let totalCharactersUsed = 0;
 
 function getClient(): ElevenLabsClient {
   client ??= new ElevenLabsClient({
@@ -41,14 +42,6 @@ async function writeAudioFile(outputPath: string, stream: ReadableStream<Uint8Ar
   await writeFile(outputPath, buffer);
 }
 
-export function getCreditsUsed(): number {
-  return totalCharactersUsed;
-}
-
-export function getCreditsRemaining(): number {
-  return Math.max(config.app.creditBudget - totalCharactersUsed, 0);
-}
-
 export async function synthesizeSpeech(
   voiceId: string,
   text: string,
@@ -63,25 +56,17 @@ export async function synthesizeSpeech(
       stability: voiceSettings?.stability ?? 0.5,
       similarityBoost: voiceSettings?.similarityBoost ?? 0.75,
       style: voiceSettings?.style ?? 0,
+      useSpeakerBoost: voiceSettings?.useSpeakerBoost ?? true,
     },
   });
 
   await writeAudioFile(outputPath, audio);
-  totalCharactersUsed += text.length;
+
+  if (!existsSync(outputPath)) {
+    throw new Error(`Expected synthesized speech file at ${outputPath}`);
+  }
 
   return outputPath;
-}
-
-export async function generateMusic(prompt: string, outputPath: string): Promise<string> {
-  void prompt;
-  void outputPath;
-  throw new Error("Music generation is scheduled for Phase 4.");
-}
-
-export async function generateSFX(prompt: string, outputPath: string): Promise<string> {
-  void prompt;
-  void outputPath;
-  throw new Error("Sound effect generation is scheduled for Phase 4.");
 }
 
 export async function createVoice(options: {
