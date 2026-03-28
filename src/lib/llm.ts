@@ -1,25 +1,14 @@
 ﻿import Anthropic from "@anthropic-ai/sdk";
 
 import { config } from "./config";
-
-export interface DialogueTurn {
-  speaker: "chad" | "marina";
-  text: string;
-  emotion: string;
-  stage_direction?: string;
-}
-
-export interface PodcastScript {
-  topic: string;
-  intro_banter: DialogueTurn[];
-  main_discussion: DialogueTurn[];
-  hot_takes: DialogueTurn[];
-  outro: DialogueTurn[];
-  fake_sponsor: {
-    name: string;
-    tagline: string;
-  };
-}
+import { FEW_SHOT_EXAMPLE } from "./few-shot-example";
+import {
+  ScriptValidationError,
+  calculateCharacterBudget,
+  validateScript,
+} from "./script-validator";
+import { SYSTEM_PROMPT } from "./system-prompt";
+import type { PodcastScript } from "./types";
 
 let anthropic: Anthropic | undefined;
 
@@ -31,76 +20,77 @@ function getAnthropicClient(): Anthropic {
   return anthropic;
 }
 
-const systemPrompt = [
-  "Generate structured JSON for a two-host comedy podcast episode.",
-  "Return valid JSON only with no markdown fences or extra commentary.",
-  "Phase 2 will replace this placeholder with the full Chad and Marina prompt.",
-].join(" ");
-
-function isDialogueTurn(value: unknown): value is DialogueTurn {
-  if (typeof value !== "object" || value === null) {
-    return false;
+function extractJson(text: string): unknown {
+  try {
+    return JSON.parse(text);
+  } catch {
+    // Try other extraction strategies below.
   }
 
-  const record = value as Record<string, unknown>;
-
-  return (
-    (record.speaker === "chad" || record.speaker === "marina") &&
-    typeof record.text === "string" &&
-    typeof record.emotion === "string" &&
-    (record.stage_direction === undefined || typeof record.stage_direction === "string")
-  );
-}
-
-function isDialogueTurnList(value: unknown): value is DialogueTurn[] {
-  return Array.isArray(value) && value.every(isDialogueTurn);
-}
-
-function validateScript(data: unknown): data is PodcastScript {
-  if (typeof data !== "object" || data === null) {
-    return false;
+  const fenced = text.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  if (fenced?.[1]) {
+    try {
+      return JSON.parse(fenced[1]);
+    } catch {
+      // Fall through to brace matching.
+    }
   }
 
-  const value = data as Record<string, unknown>;
-  const fakeSponsor = value.fake_sponsor;
+  let depth = 0;
+  let start = -1;
 
-  return (
-    typeof value.topic === "string" &&
-    isDialogueTurnList(value.intro_banter) &&
-    isDialogueTurnList(value.main_discussion) &&
-    isDialogueTurnList(value.hot_takes) &&
-    isDialogueTurnList(value.outro) &&
-    typeof fakeSponsor === "object" &&
-    fakeSponsor !== null &&
-    typeof (fakeSponsor as Record<string, unknown>).name === "string" &&
-    typeof (fakeSponsor as Record<string, unknown>).tagline === "string"
-  );
-}
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
 
-function extractJsonBlock(rawText: string): string {
-  const match = rawText.match(/\{[\s\S]*\}/);
+    if (char === "{") {
+      if (depth === 0) {
+        start = index;
+      }
+      depth += 1;
+      continue;
+    }
 
-  if (!match) {
-    throw new Error("No JSON object found in model response.");
+    if (char === "}") {
+      depth -= 1;
+      if (depth === 0 && start !== -1) {
+        const candidate = text.slice(start, index + 1);
+        try {
+          return JSON.parse(candidate);
+        } catch {
+          // Keep scanning in case there is another object later.
+        }
+      }
+    }
   }
 
-  return match[0];
+  throw new Error("No valid JSON found in LLM response.");
+}
+
+function getFullSystemPrompt(): string {
+  return `${SYSTEM_PROMPT}\n\n${FEW_SHOT_EXAMPLE}`;
 }
 
 export async function generateScript(topic: string, maxRetries = 2): Promise<PodcastScript> {
+  const prompt = getFullSystemPrompt();
+  let lastError: Error | null = null;
+
   for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
     try {
+      console.log(`Generating script for \"${topic}\" (attempt ${attempt + 1}/${maxRetries + 1})`);
+
       const response = await getAnthropicClient().messages.create({
         model: config.anthropic.model,
         max_tokens: config.anthropic.maxTokens,
-        system: systemPrompt,
+        system: prompt,
         messages: [
           {
             role: "user",
             content: [
               {
                 type: "text",
-                text: `Generate a podcast episode about "${topic}".`,
+                text:
+                  `Generate a Confidently Wrong podcast episode about: ${topic}\n\n` +
+                  "Respond with raw JSON only. No markdown. No code fences. No explanation.",
               },
             ],
           },
@@ -113,21 +103,63 @@ export async function generateScript(topic: string, maxRetries = 2): Promise<Pod
         .join("\n")
         .trim();
 
-      const parsed = JSON.parse(extractJsonBlock(text)) as unknown;
-
-      if (!validateScript(parsed)) {
-        throw new Error("Schema validation failed for generated script.");
+      if (!text) {
+        throw new Error("Empty LLM response.");
       }
+
+      const parsed = extractJson(text);
+      validateScript(parsed);
+
+      const budget = calculateCharacterBudget(parsed);
+      if (budget.total < 2000) {
+        throw new ScriptValidationError("total_characters", `script too short: ${budget.total} chars`);
+      }
+      if (budget.total > 4000) {
+        throw new ScriptValidationError("total_characters", `script too long: ${budget.total} chars`);
+      }
+
+      console.log(
+        `Script generated successfully (${budget.total} chars). ` +
+          Object.entries(budget.bySection)
+            .map(([section, value]) => `${section}: ${value}`)
+            .join(", "),
+      );
 
       return parsed;
     } catch (error) {
-      if (attempt === maxRetries) {
-        throw error;
-      }
+      lastError = error instanceof Error ? error : new Error(String(error));
+      console.warn(`Script generation attempt ${attempt + 1} failed: ${lastError.message}`);
 
-      console.warn(`Script generation attempt ${attempt + 1} failed. Retrying...`, error);
+      if (attempt < maxRetries) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
     }
   }
 
-  throw new Error("Script generation retries exhausted.");
+  throw new Error(
+    `Script generation failed after ${maxRetries + 1} attempts: ${lastError?.message ?? "Unknown error"}`,
+  );
+}
+
+export async function testGeneration(topic: string): Promise<void> {
+  console.log(`\n${"=".repeat(60)}`);
+  console.log(`Testing topic: ${topic}`);
+  console.log("=".repeat(60));
+
+  const script = await generateScript(topic);
+  const budget = calculateCharacterBudget(script);
+
+  console.log(`Title: ${script.episode_title}`);
+  console.log(`Sponsor: ${script.fake_sponsor.name} - ${script.fake_sponsor.tagline}`);
+  console.log(`Total chars: ${budget.total}`);
+  console.log(`Chad chars: ${budget.bySpeaker.chad}`);
+  console.log(`Marina chars: ${budget.bySpeaker.marina}`);
+  console.log(`Show notes: ${script.show_notes}`);
+  console.log("\nSample dialogue:");
+
+  for (const turn of script.main_discussion.slice(0, 4)) {
+    const direction = turn.stage_direction ? ` ${turn.stage_direction}` : "";
+    console.log(`${turn.speaker.toUpperCase()} [${turn.emotion}]${direction}`);
+    console.log(`  ${turn.text}`);
+  }
 }

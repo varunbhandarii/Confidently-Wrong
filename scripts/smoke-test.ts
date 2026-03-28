@@ -46,7 +46,7 @@ async function smokeTest() {
   });
 
   const llmResponse = await anthropic.messages.create({
-    model: process.env.LLM_MODEL?.trim() || "claude-sonnet-4-20250514",
+    model: process.env.LLM_MODEL?.trim() || "claude-sonnet-4-6",
     max_tokens: 200,
     messages: [
       {
@@ -130,3 +130,4 @@ smokeTest().catch((error) => {
   console.error("SMOKE TEST FAILED:", error);
   process.exit(1);
 });
+

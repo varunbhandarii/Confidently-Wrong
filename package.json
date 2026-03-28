@@ -12,7 +12,8 @@
     "db:generate": "prisma generate",
     "db:init": "prisma db execute --file prisma/init.sql",
     "create:voices": "tsx scripts/create-voices.ts",
-    "smoke-test": "tsx scripts/smoke-test.ts"
+    "smoke-test": "tsx scripts/smoke-test.ts",
+    "test:script-gen": "tsx scripts/test-script-gen.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",

@@ -46,7 +46,7 @@ export const config = {
       return requireEnv("ANTHROPIC_API_KEY");
     },
     get model() {
-      return process.env.LLM_MODEL?.trim() || "claude-sonnet-4-20250514";
+      return process.env.LLM_MODEL?.trim() || "claude-sonnet-4-6";
     },
     get maxTokens() {
       return parseInteger("LLM_MAX_TOKENS", 4096);
@@ -75,3 +75,4 @@ export function requireVoiceId(speaker: "chad" | "marina"): string {
 
   return voiceId;
 }
+
