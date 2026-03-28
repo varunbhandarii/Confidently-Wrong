@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Episode {
+  id              String       @id @default(uuid())
+  episodeNumber   Int          @unique
+  topicTitle      String
+  scriptJson      String
+  audioUrl        String?
+  audioSizeBytes  Int?
+  durationSeconds Int?
+  showNotes       String?
+  status          String       @default("pending")
+  charactersUsed  Int          @default(0)
+  createdAt       DateTime     @default(now())
+  publishedAt     DateTime?
+  audioAssets     AudioAsset[]
+}
+
+model Topic {
+  id            String   @id @default(uuid())
+  title         String
+  description   String?
+  votes         Int      @default(0)
+  status        String   @default("pending")
+  submittedByIp String
+  createdAt     DateTime @default(now())
+}
+
+model AudioAsset {
+  id         String   @id @default(uuid())
+  type       String
+  promptHash String?
+  filePath   String
+  episodeId  String?
+  episode    Episode? @relation(fields: [episodeId], references: [id], onDelete: SetNull)
+
+  @@index([episodeId])
+}
