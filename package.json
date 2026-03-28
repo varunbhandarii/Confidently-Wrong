@@ -17,7 +17,10 @@
     "test:synthesis": "tsx scripts/test-synthesis.ts",
     "generate:assets": "tsx scripts/generate-assets.ts",
     "test:sfx-pipeline": "tsx scripts/test-sfx-pipeline.ts",
-    "verify:sfx-cache": "tsx scripts/verify-sfx-cache.ts"
+    "verify:sfx-cache": "tsx scripts/verify-sfx-cache.ts",
+    "test:mixing": "tsx scripts/test-mixing.ts",
+    "generate:artwork": "tsx scripts/generate-artwork.ts",
+    "test:feed": "tsx scripts/test-feed.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",

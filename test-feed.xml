@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Confidently Wrong</title>
+    <link>http://localhost:3000</link>
+    <description>Chad, an overconfident tech bro, and Marina, a melodramatic conspiracy theorist, debate topics they absolutely do not understand. Every episode is polished, committed, and deeply, gloriously incorrect.</description>
+    <language>en-us</language>
+    <copyright>Copyright 2026 Confidently Wrong</copyright>
+    <generator>Confidently Wrong RSS Generator</generator>
+    <lastBuildDate>Sat, 28 Mar 2026 22:30:06 GMT</lastBuildDate>
+    <ttl>60</ttl>
+    <atom:link href="http://localhost:3000/feed.xml" rel="self" type="application/rss+xml"/>
+    <itunes:author>Chad &amp; Marina</itunes:author>
+    <itunes:summary>Chad, an overconfident tech bro, and Marina, a melodramatic conspiracy theorist, debate topics they absolutely do not understand. Every episode is polished, committed, and deeply, gloriously incorrect.</itunes:summary>
+    <itunes:subtitle>The podcast where absolute confidence meets catastrophic accuracy.</itunes:subtitle>
+    <itunes:type>episodic</itunes:type>
+    <itunes:explicit>false</itunes:explicit>
+    <itunes:image href="http://localhost:3000/images/podcast-cover.jpg"/>
+    <itunes:category text="Comedy">
+      <itunes:category text="Improv"/>
+    </itunes:category>
+    <itunes:owner>
+      <itunes:name>Confidently Wrong Production Desk</itunes:name>
+      <itunes:email>team@confidentlywrong.fm</itunes:email>
+    </itunes:owner>
+    <item>
+      <title>Ep. 5: Pillow Talk: The Soft Underbelly of a Global Conspiracy</title>
+      <description><![CDATA[Chad and Marina expose the pillow industry and immediately disagree about everything except the documents inside the fill. Chad pitches PillowDAO while Marina traces cervical compression back to a shadowy dairy council. Feathers are never innocent.]]></description>
+      <link>http://localhost:3000/audio/episodes/81c0aaf9-1ee3-4b10-8b27-da57f65f1a63/confidently-wrong-ep005.mp3</link>
+      <guid isPermaLink="true">http://localhost:3000/audio/episodes/81c0aaf9-1ee3-4b10-8b27-da57f65f1a63/confidently-wrong-ep005.mp3</guid>
+      <pubDate>Sat, 28 Mar 2026 22:30:06 GMT</pubDate>
+      <enclosure url="http://localhost:3000/audio/episodes/81c0aaf9-1ee3-4b10-8b27-da57f65f1a63/confidently-wrong-ep005.mp3" length="4994427" type="audio/mpeg"/>
+      <itunes:title>Ep. 5: Pillow Talk: The Soft Underbelly of a Global Conspiracy</itunes:title>
+      <itunes:author>Chad &amp; Marina</itunes:author>
+      <itunes:summary><![CDATA[Chad and Marina expose the pillow industry and immediately disagree about everything except the documents inside the fill. Chad pitches PillowDAO while Marina traces cervical compression back to a shadowy dairy council. Feathers are never innocent.]]></itunes:summary>
+      <itunes:duration>00:05:12</itunes:duration>
+      <itunes:episode>5</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:explicit>false</itunes:explicit>
+    </item>
+  </channel>
+</rss>
