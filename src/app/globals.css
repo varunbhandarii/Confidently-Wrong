@@ -10,6 +10,10 @@
   --accent-strong: #6d2310;
   --muted: #6e6155;
   --glow: rgba(214, 141, 86, 0.2);
+  --night: #141922;
+  --success: #246f49;
+  --warning: #b97717;
+  --danger: #b53927;
 }
 
 @theme inline {
@@ -17,10 +21,15 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -32,6 +41,18 @@ body {
   font-family: var(--font-geist-sans), sans-serif;
 }
 
+.font-display {
+  font-family: var(--font-display), serif;
+  font-variation-settings: "SOFT" 50, "WONK" 1;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -40,3 +61,16 @@ a {
 ::selection {
   background: rgba(182, 76, 47, 0.18);
 }
+
+@keyframes signalPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+

@@ -1,5 +1,7 @@
 ﻿import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+
+import { config } from "@/lib/config";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,9 +14,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const fraunces = Fraunces({
+  variable: "--font-display",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
-  title: "Confidently Wrong",
-  description: "AI-generated podcast pipeline for hilariously bad advice.",
+  metadataBase: new URL(config.app.baseUrl),
+  title: "Confidently Wrong | The World's Worst Podcast",
+  description:
+    "A polished listening room for an AI podcast where Chad and Marina say spectacularly wrong things with complete confidence.",
+  openGraph: {
+    title: "Confidently Wrong",
+    description: "The World's Worst Podcast. Two AI hosts. Zero expertise. Full confidence.",
+    images: ["/images/podcast-cover.jpg"],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Confidently Wrong",
+    description: "The World's Worst Podcast.",
+    images: ["/images/podcast-cover.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -25,11 +46,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
-        {children}
-      </body>
+      <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">{children}</body>
     </html>
   );
 }

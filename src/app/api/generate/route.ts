@@ -1,10 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 
 import { config } from "@/lib/config";
 import { db } from "@/lib/db";
 import { getRandomTopic } from "@/lib/fallback-topics";
+import { assembleEpisode } from "@/lib/episode-assembler";
 import { generateScript } from "@/lib/llm";
+import { generateEpisodeSFX } from "@/lib/sfx-pipeline";
 import { calculateCharacterBudget } from "@/lib/script-validator";
+import { synthesizeEpisode } from "@/lib/synthesis-orchestrator";
 
 function sanitizeTopic(value: unknown): string | null {
   if (typeof value !== "string") {
@@ -37,10 +40,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  try {
-    let topic = sanitizeTopic(body.topic);
-    let selectedTopicId: string | null = null;
+  let selectedTopicId: string | null = null;
+  let topic = sanitizeTopic(body.topic);
+  let episodeId: string | null = null;
 
+  try {
     if (!topic) {
       const topTopic = await db.topic.findFirst({
         where: { status: "pending" },
@@ -56,7 +60,6 @@ export async function POST(req: NextRequest) {
     }
 
     const episodeNumber = await getNextEpisodeNumber();
-
     const episode = await db.episode.create({
       data: {
         episodeNumber,
@@ -64,7 +67,13 @@ export async function POST(req: NextRequest) {
         scriptJson: "{}",
         status: "scripting",
       },
+      select: {
+        id: true,
+        episodeNumber: true,
+      },
     });
+
+    episodeId = episode.id;
 
     if (selectedTopicId) {
       await db.topic.update({
@@ -85,25 +94,63 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    const synthesis = await synthesizeEpisode(script, episode.id);
+    await db.episode.update({
+      where: { id: episode.id },
+      data: {
+        charactersUsed: synthesis.totalCharacters,
+        status: "synthesizing",
+      },
+    });
+
+    const sfx = await generateEpisodeSFX(script, episode.id);
+    const assembly = await assembleEpisode(episode.id, script, synthesis, sfx);
+
     return NextResponse.json({
       success: true,
       episodeId: episode.id,
-      episodeNumber,
+      episodeNumber: episode.episodeNumber,
       topic,
       title: script.episode_title,
       sponsor: script.fake_sponsor.name,
       characterBudget: budget,
+      synthesis: {
+        turnsSucceeded: synthesis.results.length,
+        turnsFailed: synthesis.failedTurns.length,
+        estimatedDurationSeconds: synthesis.totalDurationEstimate,
+      },
+      assembly: {
+        finalPath: assembly.finalPath,
+        durationSeconds: assembly.durationSeconds,
+        fileSizeBytes: assembly.fileSizeBytes,
+      },
+      status: "mixing",
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
-    console.error("Script generation failed:", error);
+    console.error("Episode generation failed:", error);
+
+    if (episodeId) {
+      await db.episode.update({
+        where: { id: episodeId },
+        data: { status: "failed" },
+      }).catch(() => undefined);
+    }
+
+    if (selectedTopicId) {
+      await db.topic.update({
+        where: { id: selectedTopicId },
+        data: { status: "pending" },
+      }).catch(() => undefined);
+    }
 
     return NextResponse.json(
       {
-        error: "Script generation failed",
+        error: "Episode generation failed",
         details: message,
       },
       { status: 500 },
     );
   }
 }
+
