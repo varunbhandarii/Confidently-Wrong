@@ -1,5 +1,6 @@
 import { getCachedAudio, hashPrompt } from "./audio-cache";
 import { SFX_PROMPT_MAP, type SfxPromptTemplate } from "./audio-prompts";
+import { createSponsorTurn } from "./script-layout";
 import type { DialogueTurn, PodcastScript } from "./types";
 
 export interface SFXRequest {
@@ -15,7 +16,14 @@ export interface SFXRequest {
 }
 
 function flattenScript(script: PodcastScript): Array<{ turn: DialogueTurn; globalIndex: number }> {
-  const sections = [script.intro_banter, script.main_discussion, script.hot_takes, script.outro];
+  const sponsorTurn = createSponsorTurn(script);
+  const sections: DialogueTurn[][] = [
+    script.intro_banter,
+    script.main_discussion,
+    script.hot_takes,
+    ...(sponsorTurn ? [[sponsorTurn]] : []),
+    script.outro,
+  ];
   const flattened: Array<{ turn: DialogueTurn; globalIndex: number }> = [];
   let globalIndex = 0;
 

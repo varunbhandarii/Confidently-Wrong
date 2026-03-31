@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { startTransition, useEffect, useMemo, useState } from "react";
 
@@ -30,15 +30,28 @@ async function fetchAdminSnapshot(): Promise<{
 }
 
 function toneForPercent(percent: number): string {
-  if (percent >= 80) {
-    return "bg-[var(--danger)]";
-  }
-
-  if (percent >= 50) {
-    return "bg-[var(--warning)]";
-  }
-
+  if (percent >= 80) return "bg-[var(--danger)]";
+  if (percent >= 50) return "bg-[var(--warning)]";
   return "bg-[var(--success)]";
+}
+
+function toneTextForPercent(percent: number): string {
+  if (percent >= 80) return "text-[var(--danger)]";
+  if (percent >= 50) return "text-[var(--warning)]";
+  return "text-[var(--success)]";
+}
+
+function statusBadgeStyle(status: string): string {
+  switch (status) {
+    case "published":
+      return "border-[var(--success-glow)] bg-[var(--success-glow)] text-[var(--success)]";
+    case "mixing":
+      return "border-[var(--accent-glow)] bg-[var(--accent-soft)] text-[var(--accent)]";
+    case "failed":
+      return "border-[var(--live-glow)] bg-[rgba(239,68,68,0.1)] text-[var(--danger)]";
+    default:
+      return "border-[var(--border)] bg-[var(--surface)] text-[var(--text-muted)]";
+  }
 }
 
 export default function AdminDashboard({ initialStatus, initialTopics }: AdminDashboardProps) {
@@ -90,9 +103,7 @@ export default function AdminDashboard({ initialStatus, initialTopics }: AdminDa
     try {
       const response = await fetch("/api/generate", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           password,
           topic: topic.trim() || undefined,
@@ -113,7 +124,7 @@ export default function AdminDashboard({ initialStatus, initialTopics }: AdminDa
 
       setTopic("");
       setGenerateMessage(
-        `Episode ${String(payload.episodeNumber).padStart(3, "0")} reached the mixing desk: ${payload.title} (${formatDurationLabel(Math.round(payload.assembly?.durationSeconds || 0))}).`,
+        `EP ${String(payload.episodeNumber).padStart(3, "0")} reached the mixing desk: ${payload.title} (${formatDurationLabel(Math.round(payload.assembly?.durationSeconds || 0))}).`,
       );
       try {
         const snapshot = await fetchAdminSnapshot();
@@ -138,9 +149,7 @@ export default function AdminDashboard({ initialStatus, initialTopics }: AdminDa
     try {
       const response = await fetch("/api/publish", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password, episodeId }),
       });
 
@@ -170,17 +179,28 @@ export default function AdminDashboard({ initialStatus, initialTopics }: AdminDa
     }
   }
 
+  // ----- Login screen -----
   if (!authed) {
     return (
-      <main className="mx-auto flex min-h-screen w-full max-w-xl items-center px-6 py-12 sm:px-10">
-        <section className="w-full rounded-[2rem] border border-[var(--border)] bg-[rgba(255,252,246,0.88)] p-8 shadow-[0_28px_80px_rgba(58,39,23,0.12)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-[var(--accent-strong)]">Admin Desk</p>
-          <h1 className="mt-4 font-display text-4xl leading-tight text-[var(--night)]">Unlock the control room.</h1>
-          <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-            The password never leaves this page except on each admin API call. It is intentionally simple because this is still a hackathon cockpit.
+      <main className="mx-auto flex min-h-screen w-full max-w-md items-center px-6 py-12 sm:px-10">
+        <section className="w-full glass-card-raised p-8">
+          <div className="mb-6 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent-soft)]">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">Admin</p>
+              <h1 className="font-display text-2xl text-[var(--text)]">Control Room</h1>
+            </div>
+          </div>
+
+          <p className="mb-6 text-sm leading-6 text-[var(--text-muted)]">
+            Enter the admin password to access the production cockpit.
           </p>
 
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-col gap-3 sm:flex-row">
             <input
               type="password"
               value={password}
@@ -190,16 +210,16 @@ export default function AdminDashboard({ initialStatus, initialTopics }: AdminDa
                   setAuthed(true);
                 }
               }}
-              placeholder="Admin password"
-              className="min-h-12 flex-1 rounded-[1.1rem] border border-[var(--border)] bg-white/90 px-4 py-3 text-sm outline-none transition focus:border-[var(--accent)]"
+              placeholder="Password"
+              className="min-h-11 flex-1 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_var(--accent-soft)]"
             />
             <button
               type="button"
               onClick={() => setAuthed(true)}
               disabled={!password.trim()}
-              className="min-h-12 rounded-full bg-[var(--night)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+              className="min-h-11 rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[var(--accent-hover)] hover:shadow-[0_0_20px_var(--accent-glow)] disabled:cursor-not-allowed disabled:opacity-40"
             >
-              Enter
+              Unlock
             </button>
           </div>
         </section>
@@ -207,169 +227,233 @@ export default function AdminDashboard({ initialStatus, initialTopics }: AdminDa
     );
   }
 
+  // ----- Dashboard -----
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-6 py-8 sm:px-10">
+    <main className="mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-6 px-5 py-6 sm:px-8 sm:py-8">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--accent-soft)]">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">Production Cockpit</p>
+            <h1 className="font-display text-2xl text-[var(--text)]">Generate, Monitor, Publish</h1>
+          </div>
+        </div>
+        <a href="/" className="rounded-full border border-[var(--border)] bg-[var(--surface-raised)] px-4 py-2 text-xs font-semibold text-[var(--text-muted)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]">
+          &larr; Back to Site
+        </a>
+      </div>
+
+      {/* Generation controls */}
       <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-[2rem] border border-[var(--border)] bg-[rgba(255,252,246,0.9)] p-6 shadow-[0_24px_70px_rgba(58,39,23,0.11)]">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-[var(--accent-strong)]">Production cockpit</p>
-          <h1 className="mt-3 font-display text-4xl text-[var(--night)]">Generate, monitor, publish.</h1>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">
-            This panel now drives the real pipeline. Generate takes an episode all the way to the mixing stage, and publish pushes mixed files into the RSS feed.
+        <div className="glass-card p-6">
+          <p className="mb-4 text-sm text-[var(--text-muted)]">
+            Generate takes an episode all the way to the mixing stage. Publish pushes mixed files into the RSS feed.
           </p>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto_auto]">
+          <div className="grid gap-3 md:grid-cols-[1fr_auto_auto]">
             <input
               type="text"
               value={topic}
               onChange={(event) => setTopic(event.target.value)}
-              placeholder="Optional topic override. Leave blank to pull the top-voted queue item."
-              className="min-h-12 rounded-[1.1rem] border border-[var(--border)] bg-white/90 px-4 py-3 text-sm outline-none transition focus:border-[var(--accent)]"
+              placeholder="Topic override (blank = top voted)"
+              className="min-h-11 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_var(--accent-soft)]"
             />
             <button
               type="button"
-              onClick={() => {
-                void generateEpisode();
-              }}
+              onClick={() => { void generateEpisode(); }}
               disabled={isGenerating}
-              className="min-h-12 rounded-full bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent-strong)] disabled:opacity-60"
+              className="inline-flex items-center gap-2 min-h-11 rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[var(--accent-hover)] hover:shadow-[0_0_20px_var(--accent-glow)] disabled:opacity-40"
             >
-              {isGenerating ? "Generating..." : "Generate Episode"}
+              {isGenerating ? (
+                <>
+                  <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                  Generating...
+                </>
+              ) : "Generate Episode"}
             </button>
             <button
               type="button"
-              onClick={() => {
-                void publishEpisodes();
-              }}
+              onClick={() => { void publishEpisodes(); }}
               disabled={isPublishing || mixedEpisodes.length === 0}
-              className="min-h-12 rounded-full border border-[var(--border)] bg-[var(--night)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-black disabled:opacity-50"
+              className="min-h-11 rounded-full border border-[var(--border-strong)] bg-[var(--surface-raised)] px-5 py-2.5 text-sm font-semibold text-[var(--text)] transition-all hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:opacity-40"
             >
-              {isPublishing ? "Publishing..." : "Publish All Pending"}
+              {isPublishing ? "Publishing..." : `Publish All (${mixedEpisodes.length})`}
             </button>
           </div>
 
-          {generateMessage ? <p className="mt-4 text-sm text-[var(--success)]">{generateMessage}</p> : null}
-          {adminError ? <p className="mt-4 text-sm text-[var(--danger)]">{adminError}</p> : null}
+          {generateMessage ? (
+            <p className="mt-4 rounded-lg bg-[var(--success-glow)] px-3 py-2 text-sm font-medium text-[var(--success)]">
+              {generateMessage}
+            </p>
+          ) : null}
+          {adminError ? (
+            <p className="mt-4 rounded-lg bg-[rgba(239,68,68,0.1)] px-3 py-2 text-sm font-medium text-[var(--danger)]">
+              {adminError}
+            </p>
+          ) : null}
         </div>
 
-        <div className="rounded-[2rem] border border-[var(--border)] bg-[rgba(17,23,32,0.95)] p-6 text-white shadow-[0_24px_70px_rgba(16,18,25,0.22)]">
-          <div className="flex items-center justify-between gap-3">
+        {/* Credit monitor */}
+        <div className="glass-card-raised p-6">
+          <div className="flex items-center justify-between gap-3 mb-4">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.3em] text-[rgba(255,215,176,0.72)]">Credit monitor</p>
-              <h2 className="mt-2 font-display text-3xl">{status.credits.percentUsed}% used</h2>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">Credits</p>
+              <h2 className={`font-display text-3xl ${toneTextForPercent(status.credits.percentUsed)}`}>
+                {status.credits.percentUsed}%
+              </h2>
             </div>
-            <span className="rounded-full bg-white/10 px-3 py-1 text-xs text-[rgba(255,244,232,0.82)]">
-              {status.credits.used.toLocaleString()} / {status.credits.budget.toLocaleString()} chars
+            <span className="rounded-lg bg-[var(--surface)] px-3 py-1.5 font-mono text-xs text-[var(--text-muted)]">
+              {status.credits.used.toLocaleString()} / {status.credits.budget.toLocaleString()}
             </span>
           </div>
 
-          <div className="mt-5 h-4 overflow-hidden rounded-full bg-white/12">
-            <div className={`h-full rounded-full ${toneForPercent(status.credits.percentUsed)}`} style={{ width: `${Math.min(status.credits.percentUsed, 100)}%` }} />
+          {/* Progress bar */}
+          <div className="h-2.5 overflow-hidden rounded-full bg-[var(--surface)]">
+            <div
+              className={`h-full rounded-full transition-all duration-700 ${toneForPercent(status.credits.percentUsed)}`}
+              style={{ width: `${Math.min(status.credits.percentUsed, 100)}%` }}
+            />
           </div>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-[1.2rem] bg-white/8 p-4">
-              <p className="text-[11px] uppercase tracking-[0.28em] text-[rgba(255,215,176,0.72)]">Pending publish</p>
-              <p className="mt-2 font-display text-3xl">{status.pendingPublishCount}</p>
+          <div className="mt-5 grid grid-cols-3 gap-3">
+            <div className="rounded-xl bg-[var(--surface)] p-3 text-center">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-faint)]">Pending</p>
+              <p className="mt-1 font-mono text-xl font-bold text-[var(--text)]">{status.pendingPublishCount}</p>
             </div>
-            <div className="rounded-[1.2rem] bg-white/8 p-4">
-              <p className="text-[11px] uppercase tracking-[0.28em] text-[rgba(255,215,176,0.72)]">SFX cache</p>
-              <p className="mt-2 font-display text-3xl">{status.cache.sfx}</p>
+            <div className="rounded-xl bg-[var(--surface)] p-3 text-center">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-faint)]">SFX Cache</p>
+              <p className="mt-1 font-mono text-xl font-bold text-[var(--text)]">{status.cache.sfx}</p>
             </div>
-            <div className="rounded-[1.2rem] bg-white/8 p-4">
-              <p className="text-[11px] uppercase tracking-[0.28em] text-[rgba(255,215,176,0.72)]">Cache weight</p>
-              <p className="mt-2 font-display text-3xl">{formatBytes(status.cache.totalSizeBytes)}</p>
+            <div className="rounded-xl bg-[var(--surface)] p-3 text-center">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--text-faint)]">Cache Size</p>
+              <p className="mt-1 font-mono text-xl font-bold text-[var(--text)]">{formatBytes(status.cache.totalSizeBytes)}</p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Active pipeline banner */}
       {status.generating ? (
-        <section className="rounded-[1.8rem] border border-[rgba(255,209,149,0.3)] bg-[rgba(255,240,212,0.82)] px-5 py-4 text-[var(--night)] shadow-[0_20px_40px_rgba(177,115,52,0.1)]">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[var(--accent-strong)]">Pipeline active</p>
-          <p className="mt-2 text-base">
-            Episode {String(status.generating.episodeNumber).padStart(3, "0")} is currently {status.generating.status} for “{status.generating.topicTitle}”. Started {formatRelativeTime(status.generating.createdAt)}.
-          </p>
+        <section className="rounded-xl border border-[var(--accent-glow)] bg-[var(--accent-soft)] px-5 py-4">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center gap-2 rounded-full bg-[var(--live)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white">
+              <span className="h-2 w-2 rounded-full bg-white animate-[signalPulse_1.2s_ease-in-out_infinite]" />
+              Live
+            </span>
+            <p className="text-sm font-medium text-[var(--text)]">
+              EP {String(status.generating.episodeNumber).padStart(3, "0")} &mdash; {status.generating.status} for &ldquo;{status.generating.topicTitle}&rdquo;
+            </p>
+            <span className="text-xs text-[var(--text-muted)]">{formatRelativeTime(status.generating.createdAt)}</span>
+          </div>
         </section>
       ) : null}
 
+      {/* Episode ledger + Sidebar */}
       <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-[2rem] border border-[var(--border)] bg-[rgba(255,252,246,0.9)] p-6 shadow-[0_22px_60px_rgba(58,39,23,0.09)]">
-          <div className="flex items-center justify-between gap-4 border-b border-[var(--border)] pb-4">
+        {/* Episode ledger */}
+        <div className="glass-card p-6">
+          <div className="flex items-center justify-between gap-4 mb-5">
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[var(--accent-strong)]">Episode ledger</p>
-              <h2 className="mt-2 font-display text-3xl text-[var(--night)]">Recent pipeline output</h2>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">Episode Ledger</p>
+              <h2 className="mt-1 font-display text-2xl text-[var(--text)]">Recent output</h2>
             </div>
-            <span className="rounded-full bg-[rgba(17,23,32,0.92)] px-3 py-1 text-xs font-semibold text-white">
+            <span className="rounded-full bg-[var(--surface-bright)] px-3 py-1 font-mono text-xs font-bold text-[var(--text-muted)]">
               {status.publishedCount} published
             </span>
           </div>
 
-          <div className="mt-5 space-y-3">
+          <div className="stagger-list space-y-3">
             {status.recentEpisodes.map((episode) => (
-              <div key={episode.id} className="grid gap-4 rounded-[1.3rem] border border-[var(--border)] bg-white/80 px-4 py-4 md:grid-cols-[1fr_auto_auto] md:items-center">
-                <div>
-                  <p className="text-[11px] uppercase tracking-[0.28em] text-[var(--accent-strong)]">Episode {String(episode.episodeNumber).padStart(3, "0")}</p>
-                  <p className="mt-1 text-base font-semibold text-[var(--night)]">{episode.title}</p>
-                  <p className="mt-1 text-sm text-[var(--muted)]">{episode.topicTitle}</p>
+              <div key={episode.id} className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 transition-all hover:bg-[var(--surface-raised)]">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
+                    <span className="mt-0.5 font-mono text-xs font-bold text-[var(--accent)]">
+                      {String(episode.episodeNumber).padStart(3, "0")}
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-[var(--text)]">{episode.title}</p>
+                      <p className="mt-0.5 text-xs text-[var(--text-faint)]">{episode.topicTitle}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className={`rounded-lg border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${statusBadgeStyle(episode.status)}`}>
+                      {episode.status}
+                    </span>
+                    {episode.status === "mixing" ? (
+                      <button
+                        type="button"
+                        onClick={() => { void publishEpisodes(episode.id); }}
+                        disabled={isPublishing}
+                        className="rounded-lg bg-[var(--accent)] px-3 py-1 text-[11px] font-bold text-white transition-all hover:bg-[var(--accent-hover)] disabled:opacity-40"
+                      >
+                        Publish
+                      </button>
+                    ) : null}
+                  </div>
                 </div>
-                <div className="text-sm text-[var(--muted)] md:text-right">
-                  <p>{episode.publishedAt ? formatEpisodeDate(episode.publishedAt) : formatRelativeTime(episode.createdAt)}</p>
-                  <p>{formatDurationLabel(episode.durationSeconds)} • {episode.charactersUsed.toLocaleString()} chars</p>
-                </div>
-                <div className="flex items-center justify-end gap-2">
-                  <span className="rounded-full border border-[var(--border)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--foreground)]">
-                    {episode.status}
-                  </span>
-                  {episode.status === "mixing" ? (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        void publishEpisodes(episode.id);
-                      }}
-                      disabled={isPublishing}
-                      className="rounded-full bg-[var(--accent)] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[var(--accent-strong)] disabled:opacity-50"
-                    >
-                      Publish
-                    </button>
-                  ) : null}
+                <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-[var(--text-faint)]">
+                  <span>{episode.publishedAt ? formatEpisodeDate(episode.publishedAt) : formatRelativeTime(episode.createdAt)}</span>
+                  <span>{formatDurationLabel(episode.durationSeconds)}</span>
+                  <span className="font-mono">{episode.charactersUsed.toLocaleString()} chars</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
 
+        {/* Sidebar: Queue + Budget */}
         <div className="space-y-6">
-          <section className="rounded-[2rem] border border-[var(--border)] bg-[rgba(255,252,246,0.9)] p-6 shadow-[0_22px_60px_rgba(58,39,23,0.09)]">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[var(--accent-strong)]">Queue watch</p>
-            <h2 className="mt-2 font-display text-3xl text-[var(--night)]">Pending topics</h2>
-            <div className="mt-4 space-y-3">
+          {/* Queue */}
+          <section className="glass-card p-5">
+            <div className="flex items-center justify-between gap-3 mb-4">
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">Queue</p>
+                <h2 className="mt-1 font-display text-xl text-[var(--text)]">Pending topics</h2>
+              </div>
+              <span className="font-mono text-xs text-[var(--text-faint)]">{topics.length} total</span>
+            </div>
+            <div className="space-y-2">
               {topics.length === 0 ? (
-                <p className="text-sm italic text-[var(--muted)]">The public queue is empty right now.</p>
+                <p className="py-4 text-center text-sm text-[var(--text-faint)]">Queue is empty.</p>
               ) : (
                 topics.slice(0, 6).map((entry) => (
-                  <div key={entry.id} className="flex items-center justify-between gap-3 rounded-[1.2rem] border border-[var(--border)] bg-white/80 px-4 py-3">
-                    <div>
-                      <p className="text-sm font-semibold text-[var(--night)]">{entry.title}</p>
-                      {entry.description ? <p className="mt-1 text-sm text-[var(--muted)]">{entry.description}</p> : null}
+                  <div key={entry.id} className="flex items-center justify-between gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-sm">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-medium text-[var(--text)]">{entry.title}</p>
+                      {entry.description ? <p className="mt-0.5 truncate text-xs text-[var(--text-faint)]">{entry.description}</p> : null}
                     </div>
-                    <span className="rounded-full bg-[rgba(17,23,32,0.92)] px-3 py-1 text-xs font-semibold text-white">{entry.votes} votes</span>
+                    <span className="shrink-0 rounded-lg bg-[var(--surface-bright)] px-2 py-1 font-mono text-xs font-bold text-[var(--text-muted)]">
+                      {entry.votes}
+                    </span>
                   </div>
                 ))
               )}
             </div>
           </section>
 
-          <section className="rounded-[2rem] border border-[var(--border)] bg-[rgba(255,252,246,0.9)] p-6 shadow-[0_22px_60px_rgba(58,39,23,0.09)]">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[var(--accent-strong)]">Budget drilldown</p>
-            <h2 className="mt-2 font-display text-3xl text-[var(--night)]">Recent spend</h2>
-            <div className="mt-4 space-y-3">
+          {/* Budget drilldown */}
+          <section className="glass-card p-5">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">Budget Drilldown</p>
+            <h2 className="mt-1 font-display text-xl text-[var(--text)]">Recent spend</h2>
+            <div className="mt-4 space-y-2">
               {status.credits.episodeBreakdown.slice(0, 5).map((entry) => (
-                <div key={entry.episodeId} className="flex items-center justify-between gap-3 rounded-[1.2rem] border border-[var(--border)] bg-white/80 px-4 py-3 text-sm">
-                  <div>
-                    <p className="font-semibold text-[var(--night)]">{entry.topic}</p>
-                    <p className="text-[var(--muted)]">{entry.status}</p>
+                <div key={entry.episodeId} className="flex items-center justify-between gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-3 py-2.5 text-sm">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium text-[var(--text)]">{entry.topic}</p>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider ${statusBadgeStyle(entry.status)} rounded px-1.5 py-0.5`}>
+                      {entry.status}
+                    </span>
                   </div>
-                  <span className="text-[var(--foreground)]">{entry.characters.toLocaleString()} chars</span>
+                  <span className="shrink-0 font-mono text-xs text-[var(--text-muted)]">{entry.characters.toLocaleString()}</span>
                 </div>
               ))}
             </div>
@@ -379,4 +463,3 @@ export default function AdminDashboard({ initialStatus, initialTopics }: AdminDa
     </main>
   );
 }
-

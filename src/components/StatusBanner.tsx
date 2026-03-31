@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 
@@ -22,11 +22,24 @@ function statusCopy(status: string): string {
     case "scripting":
       return "Chad and Marina are drafting their next terrible argument.";
     case "synthesizing":
-      return "Voices are rendering in the booth right now.";
+      return "Voices are rendering in the booth.";
     case "mixing":
       return "Final jingles and bad decisions are being stitched together.";
     default:
       return "A fresh episode is on the way.";
+  }
+}
+
+function statusIcon(status: string): string {
+  switch (status) {
+    case "scripting":
+      return "pencil";
+    case "synthesizing":
+      return "mic";
+    case "mixing":
+      return "sliders";
+    default:
+      return "loader";
   }
 }
 
@@ -56,19 +69,20 @@ export default function StatusBanner({ initialStatus }: StatusBannerProps) {
     return null;
   }
 
+  const icon = statusIcon(snapshot.generating.status);
+
   return (
-    <div className="border-b border-[rgba(255,214,164,0.35)] bg-[linear-gradient(90deg,rgba(255,239,203,0.95),rgba(255,222,166,0.92),rgba(255,239,203,0.95))] text-[var(--night)] shadow-[0_10px_30px_rgba(164,102,49,0.16)]">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 px-6 py-3 sm:px-10">
-        <span className="inline-flex items-center gap-2 rounded-full bg-[rgba(17,23,32,0.92)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.28em] text-white">
-          <span className="h-2.5 w-2.5 rounded-full bg-[var(--danger)] animate-[signalPulse_1.8s_ease-in-out_infinite]" />
-          Now Generating
+    <div className="border-b border-[var(--accent-glow)] bg-gradient-to-r from-[rgba(249,115,22,0.08)] via-[rgba(249,115,22,0.12)] to-[rgba(249,115,22,0.08)] backdrop-blur-sm">
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-6 py-3 sm:px-10">
+        <span className="inline-flex items-center gap-2 rounded-full bg-[var(--live)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white">
+          <span className="h-2 w-2 rounded-full bg-white animate-[signalPulse_1.2s_ease-in-out_infinite]" />
+          Live
         </span>
-        <p className="text-sm font-medium">
-          Episode {String(snapshot.generating.episodeNumber).padStart(3, "0")}: “{snapshot.generating.topicTitle}”
+        <p className="text-sm font-medium text-[var(--text)]">
+          EP {String(snapshot.generating.episodeNumber).padStart(3, "0")}: &ldquo;{snapshot.generating.topicTitle}&rdquo;
         </p>
-        <p className="text-sm text-[rgba(24,16,10,0.7)]">{statusCopy(snapshot.generating.status)}</p>
+        <p className="text-sm text-[var(--text-muted)]">{statusCopy(snapshot.generating.status)}</p>
       </div>
     </div>
   );
 }
-

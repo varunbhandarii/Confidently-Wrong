@@ -1,4 +1,4 @@
-﻿import AudioPlayer from "./AudioPlayer";
+import AudioPlayer from "./AudioPlayer";
 import { formatDurationLabel, formatEpisodeDate } from "@/lib/formatters";
 import type { PublicEpisodeSummary } from "@/lib/view-models";
 
@@ -8,50 +8,53 @@ interface EpisodeCardProps {
 
 export default function EpisodeCard({ episode }: EpisodeCardProps) {
   return (
-    <article className="rounded-[1.8rem] border border-[var(--border)] bg-[rgba(255,252,246,0.88)] p-5 shadow-[0_24px_60px_rgba(58,39,23,0.08)] backdrop-blur">
-      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[var(--border)] pb-4">
-        <div className="space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.34em] text-[var(--accent-strong)]">
-            Episode {String(episode.episodeNumber).padStart(3, "0")}
-          </p>
-          <h3 className="font-display max-w-2xl text-2xl leading-tight text-[var(--night)] sm:text-[2rem]">
-            {episode.title}
-          </h3>
-          <p className="max-w-2xl text-sm leading-6 text-[var(--muted)]">{episode.showNotes}</p>
+    <article className="glass-card p-5 transition-all hover:border-[var(--border-strong)] hover:bg-[var(--surface-raised)]">
+      <div className="flex flex-wrap items-start justify-between gap-4 pb-4">
+        <div className="flex items-start gap-4">
+          {/* Episode number badge */}
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--accent-soft)] font-mono text-sm font-bold text-[var(--accent)]">
+            {String(episode.episodeNumber).padStart(2, "0")}
+          </div>
+          <div className="space-y-1.5">
+            <h3 className="font-display max-w-2xl text-xl leading-tight text-[var(--text)] sm:text-2xl">
+              {episode.title}
+            </h3>
+            <p className="max-w-2xl text-sm leading-6 text-[var(--text-muted)]">{episode.showNotes}</p>
+          </div>
         </div>
 
-        <dl className="grid min-w-[170px] gap-3 text-sm text-[var(--muted)] sm:text-right">
-          <div>
-            <dt className="text-[11px] uppercase tracking-[0.28em]">Published</dt>
-            <dd className="mt-1 text-[var(--foreground)]">{formatEpisodeDate(episode.publishedAt)}</dd>
-          </div>
-          <div>
-            <dt className="text-[11px] uppercase tracking-[0.28em]">Runtime</dt>
-            <dd className="mt-1 text-[var(--foreground)]">{formatDurationLabel(episode.durationSeconds)}</dd>
-          </div>
-        </dl>
+        <div className="flex items-center gap-2 text-xs text-[var(--text-faint)]">
+          <span className="rounded-lg bg-[var(--surface-bright)] px-2.5 py-1 font-medium">
+            {formatEpisodeDate(episode.publishedAt)}
+          </span>
+          <span className="rounded-lg bg-[var(--surface-bright)] px-2.5 py-1 font-medium">
+            {formatDurationLabel(episode.durationSeconds)}
+          </span>
+        </div>
       </div>
 
-      <div className="mt-4 space-y-4">
+      <div className="space-y-3">
         {episode.audioUrl ? (
           <AudioPlayer src={episode.audioUrl} title={episode.title} />
         ) : (
-          <p className="rounded-2xl border border-dashed border-[var(--border)] px-4 py-5 text-sm italic text-[var(--muted)]">
+          <div className="flex items-center gap-3 rounded-xl border border-dashed border-[var(--border)] px-4 py-4 text-sm text-[var(--text-faint)]">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50">
+              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+            </svg>
             Audio is still routing through the control room.
-          </p>
+          </div>
         )}
 
         {episode.sponsor ? (
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-[1.2rem] bg-[rgba(18,22,32,0.92)] px-4 py-3 text-sm text-white">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-[var(--surface-bright)] px-4 py-3 text-sm">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.28em] text-[rgba(255,215,176,0.78)]">Fake Sponsor</p>
-              <p className="mt-1 font-medium">{episode.sponsor.name}</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--accent)]">Fake Sponsor</p>
+              <p className="mt-0.5 font-medium text-[var(--text)]">{episode.sponsor.name}</p>
             </div>
-            <p className="max-w-xl text-right text-[rgba(255,244,232,0.9)]">{episode.sponsor.tagline}</p>
+            <p className="text-right text-[var(--text-muted)] italic">&ldquo;{episode.sponsor.tagline}&rdquo;</p>
           </div>
         ) : null}
       </div>
     </article>
   );
 }
-

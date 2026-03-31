@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { startTransition, useEffect, useState } from "react";
 
@@ -31,6 +31,8 @@ export default function TopicVoting({ initialTopics }: TopicVotingProps) {
   const [topics, setTopics] = useState<PublicTopicSummary[]>(sortTopics(initialTopics));
   const [busyId, setBusyId] = useState<string | null>(null);
   const [error, setError] = useState("");
+
+  const maxVotes = Math.max(1, ...topics.map((t) => t.votes));
 
   useEffect(() => {
     const refreshTopics = async () => {
@@ -129,39 +131,67 @@ export default function TopicVoting({ initialTopics }: TopicVotingProps) {
 
   if (topics.length === 0) {
     return (
-      <p className="rounded-[1.4rem] border border-dashed border-[var(--border)] px-4 py-5 text-sm italic text-[var(--muted)]">
-        No topics suggested yet. Be the first person to derail the next episode.
-      </p>
+      <div className="flex flex-col items-center justify-center px-4 py-8 text-center">
+        <div className="mb-3 rounded-full bg-[var(--accent-soft)] p-3">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        </div>
+        <p className="text-sm text-[var(--text-muted)]">No topics yet. Be the first to derail the next episode.</p>
+      </div>
     );
   }
 
   return (
-    <div className="space-y-3">
-      {topics.map((topic, index) => (
-        <div
-          key={topic.id}
-          className="grid gap-3 rounded-[1.35rem] border border-[var(--border)] bg-white/80 px-4 py-4 sm:grid-cols-[auto_1fr_auto] sm:items-center"
-        >
-          <div className="font-display text-3xl text-[var(--accent-strong)]">{String(index + 1).padStart(2, "0")}</div>
-          <div>
-            <p className="text-sm font-semibold text-[var(--night)]">{topic.title}</p>
-            {topic.description ? <p className="mt-1 text-sm text-[var(--muted)]">{topic.description}</p> : null}
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              void vote(topic.id);
-            }}
-            disabled={busyId === topic.id}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--border)] bg-[rgba(17,23,32,0.94)] px-4 py-2 text-sm font-semibold text-white transition hover:border-[var(--accent)] disabled:opacity-60"
+    <div className="stagger-list space-y-2.5">
+      {topics.map((topic, index) => {
+        const votePercent = (topic.votes / maxVotes) * 100;
+        const isTop = index === 0 && topics.length > 1;
+
+        return (
+          <div
+            key={topic.id}
+            className={`group relative overflow-hidden rounded-xl border bg-[var(--surface)] p-3.5 transition-all hover:bg-[var(--surface-raised)] ${
+              isTop ? "border-[var(--accent-glow)]" : "border-[var(--border)]"
+            }`}
           >
-            <span>{busyId === topic.id ? "Voting..." : "Vote"}</span>
-            <span className="rounded-full bg-white/14 px-2 py-0.5 text-xs">{topic.votes}</span>
-          </button>
-        </div>
-      ))}
+            {/* Vote progress bar background */}
+            <div
+              className="vote-bar-fill absolute inset-y-0 left-0 bg-[var(--accent-soft)] transition-all duration-500"
+              style={{ width: `${votePercent}%` }}
+            />
+
+            <div className="relative flex items-center gap-3">
+              {/* Rank */}
+              <span className={`font-mono text-sm font-bold ${isTop ? "text-[var(--accent)]" : "text-[var(--text-faint)]"}`}>
+                #{index + 1}
+              </span>
+
+              {/* Topic info */}
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-[var(--text)]">{topic.title}</p>
+                {topic.description ? (
+                  <p className="mt-0.5 truncate text-xs text-[var(--text-muted)]">{topic.description}</p>
+                ) : null}
+              </div>
+
+              {/* Vote button */}
+              <button
+                type="button"
+                onClick={() => { void vote(topic.id); }}
+                disabled={busyId === topic.id}
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-[var(--border)] bg-[var(--surface-raised)] px-3 py-1.5 text-xs font-bold text-[var(--text)] transition-all hover:border-[var(--accent)] hover:text-[var(--accent)] active:scale-95 disabled:opacity-40"
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 19V5" /><path d="m5 12 7-7 7 7" />
+                </svg>
+                <span className="font-mono">{topic.votes}</span>
+              </button>
+            </div>
+          </div>
+        );
+      })}
       {error ? <p className="text-sm text-[var(--danger)]">{error}</p> : null}
     </div>
   );
 }
-

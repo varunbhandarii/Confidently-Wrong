@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 
 import { config } from "@/lib/config";
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(config.app.baseUrl),
   title: "Confidently Wrong | The World's Worst Podcast",
   description:
-    "A polished listening room for an AI podcast where Chad and Marina say spectacularly wrong things with complete confidence.",
+    "An AI podcast where Chad and Marina say spectacularly wrong things with complete confidence. Submit topics, vote on what they ruin next, and listen to the chaos.",
   openGraph: {
     title: "Confidently Wrong",
     description: "The World's Worst Podcast. Two AI hosts. Zero expertise. Full confidence.",
@@ -48,7 +48,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-[var(--background)] text-[var(--foreground)]">{children}</body>
+      <body className="min-h-full bg-[var(--bg)] text-[var(--text)]">{children}</body>
     </html>
   );
 }

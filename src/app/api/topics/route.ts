@@ -3,6 +3,8 @@
 import { findDuplicatePendingTopic, getPendingTopics, hashRequesterIp } from "@/lib/app-data";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 function sanitizeText(value: unknown, maxLength: number): string {
   if (typeof value !== "string") {
     return "";

@@ -1,4 +1,4 @@
-﻿import HeroBanner from "@/components/HeroBanner";
+import HeroBanner from "@/components/HeroBanner";
 import EpisodeList from "@/components/EpisodeList";
 import StatusBanner from "@/components/StatusBanner";
 import TopicForm from "@/components/TopicForm";
@@ -16,7 +16,7 @@ export default async function Home() {
   return (
     <>
       <StatusBanner initialStatus={status} />
-      <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-6 py-6 sm:px-10 sm:py-8">
+      <main className="mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-8 px-5 py-6 sm:px-8 sm:py-8">
         <HeroBanner
           latestEpisode={episodes[0] ?? null}
           feedUrl={`${config.app.baseUrl}/feed.xml`}
@@ -25,55 +25,83 @@ export default async function Home() {
         />
 
         <section className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+          {/* Episodes column */}
           <div id="episodes" className="space-y-5">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[var(--accent-strong)]">Episode archive</p>
-                <h2 className="mt-2 font-display text-4xl text-[var(--night)]">Play the bad takes.</h2>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">
+                  Episode Archive
+                </p>
+                <h2 className="mt-2 font-display text-3xl text-[var(--text)] sm:text-4xl">
+                  Play the bad takes.
+                </h2>
               </div>
-              <p className="max-w-xs text-right text-sm leading-6 text-[var(--muted)]">
-                Every published episode is already mixed, tagged, and ready for the feed.
+              <p className="hidden text-right text-xs leading-5 text-[var(--text-faint)] sm:block">
+                Every episode: mixed, tagged, and<br />ready for the feed.
               </p>
             </div>
             <EpisodeList episodes={episodes} />
           </div>
 
-          <div id="topics" className="space-y-6">
-            <section className="rounded-[1.9rem] border border-[var(--border)] bg-[rgba(255,252,246,0.88)] p-6 shadow-[0_24px_70px_rgba(58,39,23,0.09)]">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[var(--accent-strong)]">Audience control</p>
-              <h2 className="mt-2 font-display text-4xl text-[var(--night)]">Feed the next argument.</h2>
-              <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-                Suggest a topic, nudge the queue, and let the booth decide whether Chad or Marina embarrasses themselves first.
-              </p>
-              <div className="mt-5">
-                <TopicForm />
+          {/* Topics column */}
+          <div id="topics" className="space-y-5">
+            {/* Submit topic */}
+            <section className="glass-card p-5">
+              <div className="mb-4 flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--accent-soft)]">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" x2="12" y1="19" y2="22" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">
+                    Audience Control
+                  </p>
+                  <h2 className="font-display text-xl text-[var(--text)]">Feed the next argument.</h2>
+                </div>
               </div>
+              <p className="mb-4 text-sm leading-6 text-[var(--text-muted)]">
+                Suggest a topic and let the booth decide whether Chad or Marina embarrasses themselves first.
+              </p>
+              <TopicForm />
             </section>
 
-            <section className="rounded-[1.9rem] border border-[var(--border)] bg-[rgba(255,252,246,0.88)] p-6 shadow-[0_24px_70px_rgba(58,39,23,0.09)]">
-              <div className="flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[var(--accent-strong)]">Vote board</p>
-                  <h2 className="mt-2 font-display text-4xl text-[var(--night)]">What should they ruin next?</h2>
+            {/* Vote board */}
+            <section className="glass-card p-5">
+              <div className="mb-4 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--accent-soft)]">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m18 15-6-6-6 6" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)]">
+                      Vote Board
+                    </p>
+                    <h2 className="font-display text-xl text-[var(--text)]">What should they ruin next?</h2>
+                  </div>
                 </div>
-                <span className="rounded-full bg-[rgba(17,23,32,0.92)] px-3 py-1 text-xs font-semibold text-white">
-                  {topics.length} live topics
+                <span className="rounded-full bg-[var(--surface-bright)] px-3 py-1 font-mono text-xs font-bold text-[var(--text-muted)]">
+                  {topics.length}
                 </span>
               </div>
-              <div className="mt-5">
-                <TopicVoting initialTopics={topics} />
-              </div>
+              <TopicVoting initialTopics={topics} />
             </section>
           </div>
         </section>
 
-        <footer className="flex flex-col gap-3 border-t border-[var(--border)] px-1 py-6 text-sm text-[var(--muted)] sm:flex-row sm:items-center sm:justify-between">
-          <p>Built for Silly Hacks 2026. Press play, laugh once, then inspect the feed.</p>
-          <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.22em]">
-            <a href="/feed.xml" target="_blank" rel="noreferrer" className="hover:text-[var(--accent-strong)]">
+        {/* Footer */}
+        <footer className="flex flex-col gap-3 border-t border-[var(--border)] px-1 py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-[var(--text-faint)]">
+            Built for <span className="font-semibold text-[var(--text-muted)]">Silly Hacks 2026</span>. Press play, laugh once, then inspect the feed.
+          </p>
+          <div className="flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-faint)]">
+            <a href="/feed.xml" target="_blank" rel="noreferrer" className="transition hover:text-[var(--accent)]">
               RSS
             </a>
-            <a href="/admin" className="hover:text-[var(--accent-strong)]">
+            <a href="/admin" className="transition hover:text-[var(--accent)]">
               Admin
             </a>
           </div>
@@ -82,4 +110,3 @@ export default async function Home() {
     </>
   );
 }
-
