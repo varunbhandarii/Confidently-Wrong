@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: "Confidently Wrong",
   description:
     "An AI podcast where Chad and Marina say spectacularly wrong things with complete confidence. Submit topics, vote on what they ruin next, and listen to the chaos.",
+  icons: {
+    icon: "/images/logo.png",
+    apple: "/images/logo.png",
+    shortcut: "/images/logo.png",
+  },
   openGraph: {
     title: "Confidently Wrong",
     description: "The World's Worst Podcast. Two AI hosts. Zero expertise. Full confidence.",
