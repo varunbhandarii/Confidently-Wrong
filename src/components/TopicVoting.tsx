@@ -61,6 +61,7 @@ export default function TopicVoting({ initialTopics }: TopicVotingProps) {
     };
 
     window.addEventListener("cw-topic-created", handleTopicCreated as EventListener);
+    void refreshTopics();
     const intervalId = window.setInterval(() => {
       void refreshTopics();
     }, 20000);
@@ -155,19 +156,16 @@ export default function TopicVoting({ initialTopics }: TopicVotingProps) {
               isTop ? "border-[var(--accent-glow)]" : "border-[var(--border)]"
             }`}
           >
-            {/* Vote progress bar background */}
             <div
               className="vote-bar-fill absolute inset-y-0 left-0 bg-[var(--accent-soft)] transition-all duration-500"
               style={{ width: `${votePercent}%` }}
             />
 
             <div className="relative flex items-center gap-3">
-              {/* Rank */}
               <span className={`font-mono text-sm font-bold ${isTop ? "text-[var(--accent)]" : "text-[var(--text-faint)]"}`}>
                 #{index + 1}
               </span>
 
-              {/* Topic info */}
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-[var(--text)]">{topic.title}</p>
                 {topic.description ? (
@@ -175,7 +173,6 @@ export default function TopicVoting({ initialTopics }: TopicVotingProps) {
                 ) : null}
               </div>
 
-              {/* Vote button */}
               <button
                 type="button"
                 onClick={() => { void vote(topic.id); }}
@@ -195,4 +192,3 @@ export default function TopicVoting({ initialTopics }: TopicVotingProps) {
     </div>
   );
 }
-

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import HeroBanner from "@/components/HeroBanner";
 import EpisodeList from "@/components/EpisodeList";
 import StatusBanner from "@/components/StatusBanner";
@@ -25,7 +27,6 @@ export default async function Home() {
         />
 
         <section className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
-          {/* Episodes column */}
           <div id="episodes" className="space-y-5">
             <div className="flex items-end justify-between gap-4">
               <div>
@@ -43,9 +44,7 @@ export default async function Home() {
             <EpisodeList episodes={episodes} />
           </div>
 
-          {/* Topics column */}
           <div id="topics" className="space-y-5">
-            {/* Submit topic */}
             <section className="glass-card p-5">
               <div className="mb-4 flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--accent-soft)]">
@@ -67,7 +66,6 @@ export default async function Home() {
               <TopicForm />
             </section>
 
-            {/* Vote board */}
             <section className="glass-card p-5">
               <div className="mb-4 flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
@@ -92,7 +90,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Footer */}
         <footer className="flex flex-col gap-3 border-t border-[var(--border)] px-1 py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[var(--text-faint)]">
             Built for <span className="font-semibold text-[var(--text-muted)]">Silly Hacks 2026</span>. Powered by ElevenLabs.
@@ -110,4 +107,3 @@ export default async function Home() {
     </>
   );
 }
-
