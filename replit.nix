@@ -1,7 +1,7 @@
 { pkgs }:
 {
   deps = [
-    pkgs.nodejs_20
+    pkgs.nodejs_22
     pkgs.ffmpeg
     pkgs.openssl
     pkgs.pkg-config

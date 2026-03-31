@@ -27,6 +27,10 @@
 
   --night: #f0ede8;
   --foreground: #f0ede8;
+
+  --font-geist-sans: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --font-display: Georgia, "Times New Roman", serif;
 }
 
 @theme inline {
@@ -66,7 +70,6 @@ body::before {
 
 .font-display {
   font-family: var(--font-display), serif;
-  font-variation-settings: "SOFT" 50, "WONK" 1;
 }
 
 button,
@@ -86,7 +89,6 @@ a {
   color: white;
 }
 
-/* ---- Custom scrollbar ---- */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -100,8 +102,6 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
-
-/* ---- Animations ---- */
 
 @keyframes signalPulse {
   0%, 100% {
@@ -174,7 +174,6 @@ a {
   animation: glowPulse 3s ease-in-out infinite;
 }
 
-/* Staggered fade-in for lists */
 .stagger-list > * {
   animation: fadeInUp 0.4s ease-out both;
 }
@@ -187,7 +186,6 @@ a {
 .stagger-list > *:nth-child(7) { animation-delay: 360ms; }
 .stagger-list > *:nth-child(8) { animation-delay: 420ms; }
 
-/* ---- Audio range slider ---- */
 input[type="range"].audio-seek {
   -webkit-appearance: none;
   appearance: none;
@@ -233,7 +231,6 @@ input[type="range"].audio-seek::-moz-range-thumb {
   box-shadow: 0 0 8px var(--accent-glow);
 }
 
-/* ---- Glass card utility ---- */
 .glass-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -248,7 +245,6 @@ input[type="range"].audio-seek::-moz-range-thumb {
   backdrop-filter: blur(12px);
 }
 
-/* ---- Gradient text ---- */
 .gradient-text {
   background: linear-gradient(135deg, #f97316 0%, #fbbf24 50%, #f97316 100%);
   background-size: 200% 200%;
@@ -258,7 +254,6 @@ input[type="range"].audio-seek::-moz-range-thumb {
   animation: gradientShift 6s ease-in-out infinite;
 }
 
-/* ---- Equalizer bars (for playing state) ---- */
 .eq-bars {
   display: flex;
   align-items: flex-end;
@@ -281,7 +276,6 @@ input[type="range"].audio-seek::-moz-range-thumb {
   height: 30%;
 }
 
-/* ---- Vote progress bar animation ---- */
 @keyframes voteBarGrow {
   from { width: 0%; }
 }

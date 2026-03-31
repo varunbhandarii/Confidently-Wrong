@@ -60,7 +60,11 @@ async function checkDatabase(): Promise<string | null> {
     await db.$disconnect();
     return null;
   } catch (error) {
-    return `Database check failed: ${error instanceof Error ? error.message : "Unknown error"}`;
+    const message = error instanceof Error ? error.message : "Unknown error";
+    if (message.includes(".prisma/client/default")) {
+      return "Prisma client is not generated yet. After Replit switches to Node 22, run `npx prisma generate` and then rerun this preflight.";
+    }
+    return `Database check failed: ${message}`;
   }
 }
 
