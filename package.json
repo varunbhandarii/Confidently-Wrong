@@ -23,6 +23,8 @@
     "test:feed": "tsx scripts/test-feed.ts",
     "deploy:preflight": "tsx scripts/deploy-preflight.ts",
     "deploy:verify": "tsx scripts/verify-live-deploy.ts",
+    "generate:episodes": "tsx scripts/generate-episodes.ts",
+    "reset:episodes": "tsx scripts/reset-generated-episodes.ts",
     "replit:start": "npm run db:generate && npm run db:push && npm run build && npm run start"
   },
   "dependencies": {

@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(config.app.baseUrl),
-  title: "Confidently Wrong | The World's Worst Podcast",
+  title: "Confidently Wrong",
   description:
     "An AI podcast where Chad and Marina say spectacularly wrong things with complete confidence. Submit topics, vote on what they ruin next, and listen to the chaos.",
   openGraph: {

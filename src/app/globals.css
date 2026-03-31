@@ -191,7 +191,7 @@ input[type="range"].audio-seek {
   appearance: none;
   background: transparent;
   cursor: pointer;
-  height: 20px;
+  height: 26px;
 }
 
 input[type="range"].audio-seek::-webkit-slider-runnable-track {
@@ -203,11 +203,11 @@ input[type="range"].audio-seek::-webkit-slider-runnable-track {
 input[type="range"].audio-seek::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--accent);
-  margin-top: -5px;
+  margin-top: -7px;
   box-shadow: 0 0 8px var(--accent-glow);
   transition: transform 0.15s;
 }
@@ -223,8 +223,8 @@ input[type="range"].audio-seek::-moz-range-track {
 }
 
 input[type="range"].audio-seek::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--accent);
   border: none;
@@ -282,4 +282,21 @@ input[type="range"].audio-seek::-moz-range-thumb {
 
 .vote-bar-fill {
   animation: voteBarGrow 0.6s ease-out both;
+}
+
+@media (pointer: coarse) {
+  input[type="range"].audio-seek {
+    height: 32px;
+  }
+
+  input[type="range"].audio-seek::-webkit-slider-thumb {
+    width: 22px;
+    height: 22px;
+    margin-top: -9px;
+  }
+
+  input[type="range"].audio-seek::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+  }
 }

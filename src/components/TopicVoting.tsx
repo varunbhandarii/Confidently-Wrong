@@ -137,7 +137,7 @@ export default function TopicVoting({ initialTopics }: TopicVotingProps) {
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
         </div>
-        <p className="text-sm text-[var(--text-muted)]">No topics yet. Be the first to derail the next episode.</p>
+        <p className="text-sm text-[var(--text-muted)]">No topics yet. Be the first!</p>
       </div>
     );
   }
@@ -195,3 +195,4 @@ export default function TopicVoting({ initialTopics }: TopicVotingProps) {
     </div>
   );
 }
+

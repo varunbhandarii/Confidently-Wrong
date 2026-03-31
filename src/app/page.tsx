@@ -95,7 +95,7 @@ export default async function Home() {
         {/* Footer */}
         <footer className="flex flex-col gap-3 border-t border-[var(--border)] px-1 py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p className="text-[var(--text-faint)]">
-            Built for <span className="font-semibold text-[var(--text-muted)]">Silly Hacks 2026</span>. Press play, laugh once, then inspect the feed.
+            Built for <span className="font-semibold text-[var(--text-muted)]">Silly Hacks 2026</span>. Powered by ElevenLabs.
           </p>
           <div className="flex flex-wrap items-center gap-4 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-faint)]">
             <a href="/feed.xml" target="_blank" rel="noreferrer" className="transition hover:text-[var(--accent)]">
@@ -110,3 +110,4 @@ export default async function Home() {
     </>
   );
 }
+
