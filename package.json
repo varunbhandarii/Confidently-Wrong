@@ -20,7 +20,10 @@
     "verify:sfx-cache": "tsx scripts/verify-sfx-cache.ts",
     "test:mixing": "tsx scripts/test-mixing.ts",
     "generate:artwork": "tsx scripts/generate-artwork.ts",
-    "test:feed": "tsx scripts/test-feed.ts"
+    "test:feed": "tsx scripts/test-feed.ts",
+    "deploy:preflight": "tsx scripts/deploy-preflight.ts",
+    "deploy:verify": "tsx scripts/verify-live-deploy.ts",
+    "replit:start": "npm run db:generate && npm run db:push && npm run build && npm run start"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",

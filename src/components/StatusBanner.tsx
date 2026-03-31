@@ -30,19 +30,6 @@ function statusCopy(status: string): string {
   }
 }
 
-function statusIcon(status: string): string {
-  switch (status) {
-    case "scripting":
-      return "pencil";
-    case "synthesizing":
-      return "mic";
-    case "mixing":
-      return "sliders";
-    default:
-      return "loader";
-  }
-}
-
 export default function StatusBanner({ initialStatus }: StatusBannerProps) {
   const [snapshot, setSnapshot] = useState(initialStatus);
 
@@ -68,8 +55,6 @@ export default function StatusBanner({ initialStatus }: StatusBannerProps) {
   if (!snapshot.generating) {
     return null;
   }
-
-  const icon = statusIcon(snapshot.generating.status);
 
   return (
     <div className="border-b border-[var(--accent-glow)] bg-gradient-to-r from-[rgba(249,115,22,0.08)] via-[rgba(249,115,22,0.12)] to-[rgba(249,115,22,0.08)] backdrop-blur-sm">

@@ -1,4 +1,4 @@
-﻿import { createHash } from "node:crypto";
+import { createHash } from "node:crypto";
 
 import { getCacheStats } from "./audio-cache";
 import { getCreditStatus } from "./credit-tracker";
@@ -10,6 +10,9 @@ import type {
   PublicTopicSummary,
   SponsorSummary,
 } from "./view-models";
+
+const ACTIVE_EPISODE_STATUSES = ["scripting", "synthesizing", "mixing"] as const;
+const STALE_PIPELINE_WINDOW_MS = 1000 * 60 * 45;
 
 function normalizeTopicTitle(value: string): string {
   return value.trim().replace(/\s+/g, " ").toLowerCase();
@@ -70,6 +73,10 @@ function serializeTopic(topic: {
   };
 }
 
+function isFreshPipelineEpisode(createdAt: Date): boolean {
+  return Date.now() - createdAt.getTime() <= STALE_PIPELINE_WINDOW_MS;
+}
+
 export async function getPublishedEpisodes(limit = 24): Promise<PublicEpisodeSummary[]> {
   const episodes = await db.episode.findMany({
     where: { status: "published" },
@@ -81,6 +88,7 @@ export async function getPublishedEpisodes(limit = 24): Promise<PublicEpisodeSum
       topicTitle: true,
       scriptJson: true,
       audioUrl: true,
+      memeUrl: true,
       durationSeconds: true,
       audioSizeBytes: true,
       showNotes: true,
@@ -102,6 +110,7 @@ export async function getPublishedEpisodes(limit = 24): Promise<PublicEpisodeSum
       title,
       topicTitle: episode.topicTitle,
       audioUrl: episode.audioUrl,
+      memeUrl: episode.memeUrl,
       durationSeconds: episode.durationSeconds,
       audioSizeBytes: episode.audioSizeBytes,
       showNotes,
@@ -131,12 +140,16 @@ export async function getPendingTopics(limit = 12): Promise<PublicTopicSummary[]
 }
 
 export async function getPipelineStatus(): Promise<PipelineStatusSnapshot> {
+  const staleCutoff = new Date(Date.now() - STALE_PIPELINE_WINDOW_MS);
   const [generating, publishedCount, pendingTopics, pendingPublishCount, recentEpisodes, credits, cache] =
     await Promise.all([
       db.episode.findFirst({
         where: {
           status: {
-            in: ["scripting", "synthesizing", "mixing"],
+            in: [...ACTIVE_EPISODE_STATUSES],
+          },
+          createdAt: {
+            gte: staleCutoff,
           },
         },
         orderBy: { createdAt: "desc" },
@@ -150,7 +163,14 @@ export async function getPipelineStatus(): Promise<PipelineStatusSnapshot> {
       }),
       db.episode.count({ where: { status: "published" } }),
       db.topic.count({ where: { status: "pending" } }),
-      db.episode.count({ where: { status: "mixing" } }),
+      db.episode.count({
+        where: {
+          status: "mixing",
+          createdAt: {
+            gte: staleCutoff,
+          },
+        },
+      }),
       db.episode.findMany({
         orderBy: [{ createdAt: "desc" }, { episodeNumber: "desc" }],
         take: 12,
@@ -191,7 +211,9 @@ export async function getPipelineStatus(): Promise<PipelineStatusSnapshot> {
       episodeNumber: episode.episodeNumber,
       title: parseEpisodePayload(episode.scriptJson, episode.topicTitle, null).title,
       topicTitle: episode.topicTitle,
-      status: episode.status,
+      status: !isFreshPipelineEpisode(episode.createdAt) && ACTIVE_EPISODE_STATUSES.includes(episode.status as (typeof ACTIVE_EPISODE_STATUSES)[number])
+        ? "failed"
+        : episode.status,
       audioUrl: episode.audioUrl,
       durationSeconds: episode.durationSeconds,
       publishedAt: episode.publishedAt?.toISOString() ?? null,
@@ -222,4 +244,3 @@ export async function findDuplicatePendingTopic(title: string) {
 
   return topics.find((topic) => normalizeTopicTitle(topic.title) === normalizedTitle) ?? null;
 }
-

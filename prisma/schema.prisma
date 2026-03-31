@@ -12,6 +12,7 @@ model Episode {
   topicTitle      String
   scriptJson      String
   audioUrl        String?
+  memeUrl         String?
   audioSizeBytes  Int?
   durationSeconds Int?
   showNotes       String?

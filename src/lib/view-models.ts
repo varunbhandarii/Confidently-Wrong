@@ -1,4 +1,4 @@
-﻿export interface SponsorSummary {
+export interface SponsorSummary {
   name: string;
   tagline: string;
 }
@@ -9,6 +9,7 @@ export interface PublicEpisodeSummary {
   title: string;
   topicTitle: string;
   audioUrl: string | null;
+  memeUrl: string | null;
   durationSeconds: number | null;
   audioSizeBytes: number | null;
   showNotes: string;
@@ -76,4 +77,3 @@ export interface PipelineStatusSnapshot {
   cache: CacheStatusSnapshot;
   recentEpisodes: PipelineEpisodeSummary[];
 }
-

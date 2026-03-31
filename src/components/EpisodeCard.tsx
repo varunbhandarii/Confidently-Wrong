@@ -1,4 +1,7 @@
+import Image from "next/image";
+
 import AudioPlayer from "./AudioPlayer";
+import ShareMemeButton from "./ShareMemeButton";
 import { formatDurationLabel, formatEpisodeDate } from "@/lib/formatters";
 import type { PublicEpisodeSummary } from "@/lib/view-models";
 
@@ -11,7 +14,6 @@ export default function EpisodeCard({ episode }: EpisodeCardProps) {
     <article className="glass-card p-5 transition-all hover:border-[var(--border-strong)] hover:bg-[var(--surface-raised)]">
       <div className="flex flex-wrap items-start justify-between gap-4 pb-4">
         <div className="flex items-start gap-4">
-          {/* Episode number badge */}
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--accent-soft)] font-mono text-sm font-bold text-[var(--accent)]">
             {String(episode.episodeNumber).padStart(2, "0")}
           </div>
@@ -44,6 +46,27 @@ export default function EpisodeCard({ episode }: EpisodeCardProps) {
             Audio is still routing through the control room.
           </div>
         )}
+
+        {episode.memeUrl ? (
+          <div className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)]">
+            <div className="relative h-72 w-full overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(249,115,22,0.18),_rgba(249,115,22,0)_48%),var(--surface-bright)] sm:h-80 lg:h-96">
+              <Image
+                src={episode.memeUrl}
+                alt={`Auto-generated meme for ${episode.title}`}
+                fill
+                className="object-contain p-3 sm:p-4"
+                sizes="(max-width: 768px) 100vw, 720px"
+              />
+            </div>
+            <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] px-4 py-3">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--accent)]">Memelord Drop</p>
+                <p className="mt-1 text-sm text-[var(--text-muted)]">Auto-generated from the wildest quote in the episode.</p>
+              </div>
+              <ShareMemeButton memeUrl={episode.memeUrl} title={episode.title} />
+            </div>
+          </div>
+        ) : null}
 
         {episode.sponsor ? (
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-[var(--surface-bright)] px-4 py-3 text-sm">

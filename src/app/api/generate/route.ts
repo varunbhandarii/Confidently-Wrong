@@ -1,12 +1,12 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { config } from "@/lib/config";
 import { db } from "@/lib/db";
-import { getRandomTopic } from "@/lib/fallback-topics";
 import { assembleEpisode } from "@/lib/episode-assembler";
+import { getRandomTopic } from "@/lib/fallback-topics";
 import { generateScript } from "@/lib/llm";
-import { generateEpisodeSFX } from "@/lib/sfx-pipeline";
 import { calculateCharacterBudget } from "@/lib/script-validator";
+import { generateEpisodeSFX } from "@/lib/sfx-pipeline";
 import { synthesizeEpisode } from "@/lib/synthesis-orchestrator";
 
 function sanitizeTopic(value: unknown): string | null {
@@ -124,6 +124,7 @@ export async function POST(req: NextRequest) {
         durationSeconds: assembly.durationSeconds,
         fileSizeBytes: assembly.fileSizeBytes,
       },
+      memeUrl: assembly.meme?.publicUrl ?? null,
       status: "mixing",
     });
   } catch (error) {
@@ -153,4 +154,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-

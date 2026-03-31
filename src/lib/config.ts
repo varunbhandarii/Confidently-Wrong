@@ -1,4 +1,4 @@
-﻿function requireEnv(key: string): string {
+function requireEnv(key: string): string {
   const value = process.env[key]?.trim();
 
   if (!value) {
@@ -63,6 +63,14 @@ export const config = {
       return parseInteger("CREDIT_BUDGET", 100000);
     },
   },
+  memelord: {
+    get apiKey() {
+      return optionalEnv("MEMELORD_API_KEY") ?? "";
+    },
+    get enabled() {
+      return Boolean(optionalEnv("MEMELORD_API_KEY"));
+    },
+  },
 } as const;
 
 export function requireVoiceId(speaker: "chad" | "marina"): string {
@@ -75,4 +83,3 @@ export function requireVoiceId(speaker: "chad" | "marina"): string {
 
   return voiceId;
 }
-

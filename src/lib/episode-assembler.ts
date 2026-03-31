@@ -1,12 +1,14 @@
 import { statSync } from "node:fs";
 import path from "node:path";
 
-import { db } from "./db";
 import { getAudioDuration, mixEpisode } from "./audio-mixer";
+import { db } from "./db";
 import { tagEpisode } from "./id3-tagger";
+import { generateMeme, type GeneratedMeme } from "./memelord";
+import { extractBestQuote } from "./quote-extractor";
 import { buildSequence, printSequence } from "./segment-sequencer";
-import type { SynthesisReport } from "./synthesis-orchestrator";
 import type { SFXManifest } from "./sfx-pipeline";
+import type { SynthesisReport } from "./synthesis-orchestrator";
 import type { PodcastScript } from "./types";
 
 export interface AssemblyResult {
@@ -15,6 +17,7 @@ export interface AssemblyResult {
   durationSeconds: number;
   fileSizeBytes: number;
   segmentCount: number;
+  meme: GeneratedMeme | null;
 }
 
 export async function assembleEpisode(
@@ -56,6 +59,8 @@ export async function assembleEpisode(
 
   const finalDurationSeconds = getAudioDuration(finalPath);
   const finalFileSizeBytes = statSync(finalPath).size;
+  const bestQuote = extractBestQuote(script);
+  const meme = await generateMeme(bestQuote.memePrompt, episodeId);
 
   await db.episode.update({
     where: {
@@ -63,6 +68,7 @@ export async function assembleEpisode(
     },
     data: {
       audioUrl: `/audio/episodes/${episodeId}/${finalFileName}`,
+      memeUrl: meme?.localPath ?? null,
       audioSizeBytes: finalFileSizeBytes,
       durationSeconds: Math.round(finalDurationSeconds),
       status: "mixing",
@@ -79,5 +85,6 @@ export async function assembleEpisode(
     durationSeconds: finalDurationSeconds,
     fileSizeBytes: finalFileSizeBytes,
     segmentCount: plan.segments.length,
+    meme,
   };
 }

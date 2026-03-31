@@ -19,6 +19,7 @@ async function getNextEpisodeNumber(db: DatabaseClient) {
 
 async function main() {
   const topic = process.argv[2]?.trim() || "Should pigeons have civil rights?";
+  const shouldPublish = !process.argv.includes("--no-publish");
 
   const [
     { db },
@@ -27,6 +28,7 @@ async function main() {
     { generateEpisodeSFX },
     { assembleEpisode },
     { getCreditStatus },
+    { publishEpisode },
   ] = await Promise.all([
     import("../src/lib/db"),
     import("../src/lib/llm"),
@@ -34,6 +36,7 @@ async function main() {
     import("../src/lib/sfx-pipeline"),
     import("../src/lib/episode-assembler"),
     import("../src/lib/credit-tracker"),
+    import("../src/lib/publisher"),
   ]);
 
   console.log("1. Generating script...");
@@ -72,6 +75,16 @@ async function main() {
   console.log(`  Duration: ${result.durationSeconds.toFixed(1)}s (${(result.durationSeconds / 60).toFixed(1)} min)`);
   console.log(`  Size: ${(result.fileSizeBytes / 1024).toFixed(0)} KB`);
   console.log(`  Segments: ${result.segmentCount}`);
+  console.log(`  Meme: ${result.meme?.localPath ?? "not generated"}`);
+
+  if (shouldPublish) {
+    console.log("\n5. Publishing episode...");
+    const published = await publishEpisode(episode.id);
+    console.log(`  Published: EP ${String(published.episodeNumber).padStart(3, "0")} - ${published.title}`);
+    console.log(`  Feed: ${published.feedUrl}`);
+  } else {
+    console.log("\n5. Publish skipped (--no-publish)");
+  }
 
   const credits = await getCreditStatus();
   console.log(`\n  Credits: ${credits.used.toLocaleString()} / ${credits.budget.toLocaleString()} (${credits.percentUsed}% used)`);

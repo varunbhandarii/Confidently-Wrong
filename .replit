@@ -1,0 +1,13 @@
+run = "npm run replit:start"
+entrypoint = "src/app/page.tsx"
+
+[nix]
+channel = "stable-24_05"
+
+[env]
+PORT = "3000"
+NODE_ENV = "production"
+
+[[ports]]
+localPort = 3000
+externalPort = 80

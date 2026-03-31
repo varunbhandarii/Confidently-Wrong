@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { startTransition, useEffect, useMemo, useState } from "react";
 
 import { formatBytes, formatDurationLabel, formatEpisodeDate, formatRelativeTime } from "@/lib/formatters";
@@ -244,9 +245,9 @@ export default function AdminDashboard({ initialStatus, initialTopics }: AdminDa
             <h1 className="font-display text-2xl text-[var(--text)]">Generate, Monitor, Publish</h1>
           </div>
         </div>
-        <a href="/" className="rounded-full border border-[var(--border)] bg-[var(--surface-raised)] px-4 py-2 text-xs font-semibold text-[var(--text-muted)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]">
+        <Link href="/" className="rounded-full border border-[var(--border)] bg-[var(--surface-raised)] px-4 py-2 text-xs font-semibold text-[var(--text-muted)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]">
           &larr; Back to Site
-        </a>
+        </Link>
       </div>
 
       {/* Generation controls */}
@@ -463,3 +464,5 @@ export default function AdminDashboard({ initialStatus, initialTopics }: AdminDa
     </main>
   );
 }
+
+
