@@ -1,7 +1,7 @@
-﻿import { loadEnvConfig } from "@next/env";
+import { loadEnvConfig } from "@next/env";
 import Anthropic from "@anthropic-ai/sdk";
 import { ElevenLabsClient } from "@elevenlabs/elevenlabs-js";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaBetterSQLite3 } from "@prisma/adapter-better-sqlite3";
 import { PrismaClient } from "@prisma/client";
 import { execSync } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
@@ -100,7 +100,7 @@ async function smokeTest() {
 
   console.log("4. Testing database...");
   const db = new PrismaClient({
-    adapter: new PrismaBetterSqlite3({
+    adapter: new PrismaBetterSQLite3({
       url: process.env.DATABASE_URL?.trim() || "file:./prisma/dev.db",
     }),
   });
@@ -130,4 +130,3 @@ smokeTest().catch((error) => {
   console.error("SMOKE TEST FAILED:", error);
   process.exit(1);
 });
-
