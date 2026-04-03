@@ -11,6 +11,7 @@ RUN npm ci
 
 COPY prisma ./prisma
 RUN npx prisma generate
+ENV DATABASE_URL="file:./prisma/dev.db"
 RUN npx prisma db push --skip-generate
 
 COPY . .
