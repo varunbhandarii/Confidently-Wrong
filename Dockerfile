@@ -11,12 +11,12 @@ RUN npm ci
 
 COPY prisma ./prisma
 RUN npx prisma generate
+
 ENV DATABASE_URL="file:./prisma/dev.db"
-RUN npx prisma db push --skip-generate
 
 COPY . .
-RUN npm run build
+RUN npx prisma db push --skip-generate && npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["sh", "-c", "npx prisma db push --skip-generate && npm start"]
