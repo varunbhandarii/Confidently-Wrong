@@ -10,9 +10,13 @@ export default function SubscribeBar({ feedUrl }: SubscribeBarProps) {
   const [copied, setCopied] = useState(false);
 
   async function copyFeedUrl() {
-    await navigator.clipboard.writeText(feedUrl);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(feedUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard access denied — fail silently.
+    }
   }
 
   return (

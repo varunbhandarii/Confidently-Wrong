@@ -7,6 +7,8 @@ import { calculateCharacterBudget } from "./script-validator";
 import { generateEpisodeSFX } from "./sfx-pipeline";
 import { synthesizeEpisode } from "./synthesis-orchestrator";
 
+let generationLock: Promise<GeneratedEpisodeResult> | null = null;
+
 export interface GenerateEpisodeOptions {
   topic?: string;
   publish?: boolean;
@@ -78,6 +80,21 @@ async function resolveTopic(explicitTopic?: string): Promise<{ topic: string; se
 }
 
 export async function generateEpisodePipeline(options: GenerateEpisodeOptions = {}): Promise<GeneratedEpisodeResult> {
+  if (generationLock) {
+    throw new Error("An episode is already being generated. Please wait for it to finish.");
+  }
+
+  const pipeline = runGenerationPipeline(options);
+  generationLock = pipeline;
+
+  try {
+    return await pipeline;
+  } finally {
+    generationLock = null;
+  }
+}
+
+async function runGenerationPipeline(options: GenerateEpisodeOptions): Promise<GeneratedEpisodeResult> {
   const { topic, selectedTopicId } = await resolveTopic(options.topic);
 
   let episodeId: string | null = null;

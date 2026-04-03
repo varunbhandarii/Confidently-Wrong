@@ -3,6 +3,7 @@ import path from "node:path";
 
 import { db } from "./db";
 import { canAffordEpisode } from "./credit-tracker";
+import { createSponsorTurn } from "./script-layout";
 import { calculateCharacterBudget } from "./script-validator";
 import { synthesizeTurn, type SynthesisResult } from "./synthesizer";
 import { SYNTHESIS_CONFIG } from "./voice-registry";
@@ -43,35 +44,6 @@ function toPosixPath(value: string): string {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function createSponsorTurn(script: PodcastScript): DialogueTurn | null {
-  const sponsorRead = script.fake_sponsor.read.trim();
-
-  if (!sponsorRead) {
-    return null;
-  }
-
-  const explicitSpeakerMatch = sponsorRead.match(/^(chad|marina)\s*[:\-]\s*(.+)$/i);
-
-  if (explicitSpeakerMatch) {
-    const speaker = explicitSpeakerMatch[1].toLowerCase() as Speaker;
-    const text = explicitSpeakerMatch[2].trim();
-
-    return {
-      speaker,
-      text,
-      emotion: speaker === "marina" ? "ominous" : "confident",
-      stage_direction: `[sponsor read: ${script.fake_sponsor.name}]`,
-    };
-  }
-
-  return {
-    speaker: "chad",
-    text: sponsorRead,
-    emotion: "confident",
-    stage_direction: `[sponsor read: ${script.fake_sponsor.name}]`,
-  };
 }
 
 function flattenScript(script: PodcastScript): DialogueTurn[] {

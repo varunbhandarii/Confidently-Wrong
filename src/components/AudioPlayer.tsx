@@ -72,8 +72,13 @@ export default function AudioPlayer({ src, title }: AudioPlayerProps) {
 
     if (audio.paused) {
       window.dispatchEvent(new CustomEvent("cw-audio-play", { detail: audioId }));
-      await audio.play();
-      setIsPlaying(true);
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch {
+        // Browser blocked autoplay or playback failed — stay paused.
+        setIsPlaying(false);
+      }
       return;
     }
 

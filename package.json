@@ -30,6 +30,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",
     "@elevenlabs/elevenlabs-js": "^2.40.0",
+    "@flydotio/litestream": "^1.0.1",
     "@prisma/adapter-better-sqlite3": "^6.0.0",
     "@prisma/client": "^6.0.0",
     "better-sqlite3": "^12.8.0",
@@ -50,5 +51,8 @@
     "tailwindcss": "^4",
     "tsx": "^4.21.0",
     "typescript": "^5"
+  },
+  "dockerfile": {
+    "litestream": true
   }
 }

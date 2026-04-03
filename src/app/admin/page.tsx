@@ -1,4 +1,6 @@
-﻿import AdminDashboard from "@/components/AdminDashboard";
+﻿export const dynamic = "force-dynamic";
+
+import AdminDashboard from "@/components/AdminDashboard";
 import { getPipelineStatus, getPendingTopics } from "@/lib/app-data";
 
 export default async function AdminPage() {

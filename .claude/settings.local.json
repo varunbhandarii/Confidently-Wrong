@@ -5,7 +5,10 @@
       "Bash(npx eslint:*)",
       "Bash(npx next:*)",
       "mcp__Claude_Preview__preview_start",
-      "Bash(taskkill //F //IM node.exe)"
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(find 'C:\\\\Projects\\\\Hackathon\\\\Silly Hacks\\\\Confidently Wrong' -type f -not -path */node_modules/* -not -path */.git/* -not -path */.next/* -not -path */.ranger/*)",
+      "Bash(npm ls:*)",
+      "WebSearch"
     ]
   }
 }
