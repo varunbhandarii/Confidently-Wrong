@@ -21,4 +21,4 @@ RUN npx prisma db push --skip-generate && npm run build && rm -f /app/prisma/bui
 EXPOSE 3000
 
 # Runtime: create DB at a fixed absolute path, then start
-CMD ["sh", "-c", "DATABASE_URL=file:/app/data/prod.db npx prisma db push --skip-generate && DATABASE_URL=file:/app/data/prod.db npm start"]
+CMD ["sh", "-c", "mkdir -p /app/data && DATABASE_URL=file:/app/data/prod.db npx prisma db push --skip-generate && DATABASE_URL=file:/app/data/prod.db npm start"]
