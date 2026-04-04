@@ -17,7 +17,8 @@ export interface PublishResult {
 }
 
 function getAudioPath(audioUrl: string): string {
-  const trimmed = audioUrl.startsWith("/") ? audioUrl.slice(1) : audioUrl;
+  // Strip /api prefix — files live under public/audio/ and public/images/
+  const trimmed = audioUrl.replace(/^\/api\//, "/").replace(/^\//, "");
   return path.join(process.cwd(), "public", trimmed);
 }
 

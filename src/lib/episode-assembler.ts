@@ -67,8 +67,8 @@ export async function assembleEpisode(
       id: episodeId,
     },
     data: {
-      audioUrl: `/audio/episodes/${episodeId}/${finalFileName}`,
-      memeUrl: meme?.localPath ?? null,
+      audioUrl: `/api/audio/episodes/${episodeId}/${finalFileName}`,
+      memeUrl: meme ? `/api/media/memes/${path.basename(meme.localPath)}` : null,
       audioSizeBytes: finalFileSizeBytes,
       durationSeconds: Math.round(finalDurationSeconds),
       status: "mixing",

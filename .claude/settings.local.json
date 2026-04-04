@@ -8,7 +8,9 @@
       "Bash(taskkill //F //IM node.exe)",
       "Bash(find 'C:\\\\Projects\\\\Hackathon\\\\Silly Hacks\\\\Confidently Wrong' -type f -not -path */node_modules/* -not -path */.git/* -not -path */.next/* -not -path */.ranger/*)",
       "Bash(npm ls:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(mkdir -p \"/c/Projects/Hackathon/Silly Hacks/Confidently Wrong/src/app/api/audio/[...path]\")",
+      "Bash(mkdir -p \"/c/Projects/Hackathon/Silly Hacks/Confidently Wrong/src/app/api/media/[...path]\")"
     ]
   }
 }
